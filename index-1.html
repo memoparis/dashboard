@@ -1,0 +1,1620 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Memo Paris — Brand Intelligence</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Mono:wght@300;400&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --ink:       #1a1814;
+    --ink-2:     #3d3930;
+    --ink-3:     #7a756c;
+    --ink-4:     #b8b4ad;
+    --paper:     #f9f7f3;
+    --paper-2:   #f0ece4;
+    --paper-3:   #e6e1d6;
+    --gold:      #a08540;
+    --gold-lt:   #e8d9b0;
+    --gold-dk:   #6b5828;
+    --green:     #3a6b2a;
+    --green-lt:  #d4ead0;
+    --red:       #9e2d2d;
+    --red-lt:    #f5dada;
+    --amber:     #9a6418;
+    --amber-lt:  #f5e4c0;
+    --blue:      #1e4f82;
+    --blue-lt:   #d0e2f5;
+    --radius:    6px;
+    --serif:     'Cormorant Garamond', Georgia, serif;
+    --sans:      'Outfit', sans-serif;
+    --mono:      'DM Mono', monospace;
+  }
+
+  html { font-size: 15px; }
+
+  body {
+    font-family: var(--sans);
+    background: var(--paper);
+    color: var(--ink);
+    min-height: 100vh;
+    font-weight: 300;
+  }
+
+  /* ── MASTHEAD ─────────────────────────────────────────────── */
+  .masthead {
+    border-bottom: 1px solid var(--paper-3);
+    padding: 0 32px;
+    display: flex;
+    align-items: stretch;
+    gap: 0;
+    background: var(--paper);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .masthead-brand {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 18px 28px 18px 0;
+    border-right: 1px solid var(--paper-3);
+    gap: 2px;
+  }
+  .masthead-eyebrow {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.18em;
+    color: var(--gold);
+    text-transform: uppercase;
+  }
+  .masthead-title {
+    font-family: var(--serif);
+    font-size: 22px;
+    font-weight: 400;
+    color: var(--ink);
+    letter-spacing: 0.02em;
+    line-height: 1;
+  }
+  .masthead-nav {
+    display: flex;
+    align-items: stretch;
+    gap: 0;
+    flex: 1;
+    padding: 0 24px;
+  }
+  .nav-tab {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    color: var(--ink-3);
+    text-transform: uppercase;
+    padding: 0 18px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: color .2s, border-color .2s;
+    white-space: nowrap;
+    user-select: none;
+  }
+  .nav-tab:hover { color: var(--ink); }
+  .nav-tab.active { color: var(--gold-dk); border-bottom-color: var(--gold); }
+  .masthead-meta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-left: auto;
+  }
+  .pulse-dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: var(--green);
+    animation: pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%,100% { opacity: 1; transform: scale(1); }
+    50% { opacity: .5; transform: scale(0.85); }
+  }
+  .masthead-time {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--ink-3);
+  }
+  .alert-pill {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.08em;
+    padding: 4px 10px;
+    border-radius: 99px;
+    font-weight: 400;
+  }
+  .pill-critical { background: var(--red-lt); color: var(--red); }
+  .pill-medium   { background: var(--amber-lt); color: var(--amber); }
+
+  /* ── VIEWS ────────────────────────────────────────────────── */
+  .view { display: none; }
+  .view.active { display: block; }
+
+  /* ── LAYOUT SHELL ─────────────────────────────────────────── */
+  .shell {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 32px 32px 64px;
+  }
+
+  /* ── SECTION HEADERS ─────────────────────────────────────── */
+  .section-header {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    margin-bottom: 20px;
+  }
+  .section-num {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--gold);
+    letter-spacing: 0.1em;
+  }
+  .section-title {
+    font-family: var(--serif);
+    font-size: 26px;
+    font-weight: 400;
+    font-style: italic;
+    color: var(--ink);
+    letter-spacing: 0.01em;
+  }
+  .section-rule {
+    height: 1px;
+    background: linear-gradient(90deg, var(--gold-lt) 0%, transparent 100%);
+    margin-bottom: 24px;
+  }
+
+  /* ── KPI STRIP ────────────────────────────────────────────── */
+  .kpi-strip {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    border: 1px solid var(--paper-3);
+    border-radius: var(--radius);
+    overflow: hidden;
+    margin-bottom: 24px;
+    background: var(--paper);
+  }
+  .kpi-cell {
+    padding: 20px 18px;
+    border-right: 1px solid var(--paper-3);
+    position: relative;
+    transition: background .2s;
+  }
+  .kpi-cell:last-child { border-right: none; }
+  .kpi-cell:hover { background: var(--paper-2); }
+  .kpi-eyebrow {
+    font-family: var(--mono);
+    font-size: 8.5px;
+    letter-spacing: 0.14em;
+    color: var(--ink-4);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .kpi-value {
+    font-family: var(--serif);
+    font-size: 38px;
+    font-weight: 300;
+    color: var(--ink);
+    line-height: 1;
+    margin-bottom: 6px;
+    letter-spacing: -0.01em;
+  }
+  .kpi-value sup {
+    font-size: 18px;
+    vertical-align: super;
+    font-family: var(--sans);
+    font-weight: 400;
+    color: var(--ink-2);
+    margin-left: 1px;
+  }
+  .kpi-delta {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.04em;
+  }
+  .delta-neg { color: var(--red); }
+  .delta-pos { color: var(--green); }
+  .delta-neu { color: var(--ink-3); }
+  .kpi-accent {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 2px;
+  }
+  .accent-red    { background: var(--red); }
+  .accent-green  { background: var(--green); }
+  .accent-gold   { background: var(--gold); }
+  .accent-amber  { background: var(--amber); }
+  .accent-ink    { background: var(--ink-3); }
+
+  /* ── CARDS ────────────────────────────────────────────────── */
+  .card {
+    background: var(--paper);
+    border: 1px solid var(--paper-3);
+    border-radius: var(--radius);
+    padding: 22px 24px;
+  }
+  .card-label {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+
+  /* ── GRID ─────────────────────────────────────────────────── */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+  .col-span-2 { grid-column: span 2; }
+
+  /* ── SENTIMENT BAR ────────────────────────────────────────── */
+  .sentiment-track {
+    display: flex;
+    height: 10px;
+    border-radius: 99px;
+    overflow: hidden;
+    gap: 2px;
+    margin-bottom: 14px;
+  }
+  .seg-pos { background: var(--green); }
+  .seg-neu { background: var(--paper-3); }
+  .seg-neg { background: var(--red); }
+  .legend {
+    display: flex;
+    gap: 18px;
+    font-family: var(--mono);
+    font-size: 9.5px;
+    color: var(--ink-3);
+    letter-spacing: 0.06em;
+  }
+  .legend-swatch {
+    display: inline-block;
+    width: 8px; height: 8px;
+    border-radius: 2px;
+    margin-right: 5px;
+    vertical-align: middle;
+  }
+
+  /* ── PLATFORM ROWS ────────────────────────────────────────── */
+  .platform-item {
+    display: grid;
+    grid-template-columns: 28px 110px 1fr 48px 70px 80px;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--paper-2);
+    font-size: 13px;
+  }
+  .platform-item:last-child { border-bottom: none; }
+  .platform-logo { display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+  .platform-name {
+    font-weight: 400;
+    color: var(--ink);
+    font-size: 13px;
+  }
+  .bar-track {
+    height: 5px;
+    background: var(--paper-2);
+    border-radius: 99px;
+    overflow: hidden;
+  }
+  .bar-fill {
+    height: 100%;
+    border-radius: 99px;
+    transition: width 1s cubic-bezier(.4,0,.2,1);
+  }
+  .plat-score {
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--ink);
+    text-align: right;
+  }
+  .plat-delta {
+    font-family: var(--mono);
+    font-size: 11px;
+    text-align: right;
+  }
+  .plat-vol {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--ink-4);
+    text-align: right;
+  }
+
+  /* ── TOPIC BARS ───────────────────────────────────────────── */
+  .topic-row {
+    display: grid;
+    grid-template-columns: 160px 1fr 36px;
+    align-items: center;
+    gap: 12px;
+    padding: 9px 0;
+    border-bottom: 1px solid var(--paper-2);
+  }
+  .topic-row:last-child { border-bottom: none; }
+  .topic-label { font-size: 12px; color: var(--ink-2); }
+  .topic-pct {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--ink-3);
+    text-align: right;
+  }
+
+  /* ── ALERTS ───────────────────────────────────────────────── */
+  .alert-item {
+    border-radius: var(--radius);
+    padding: 16px 18px;
+    margin-bottom: 10px;
+    border-left: 3px solid;
+    animation: fadeIn .4s ease;
+    cursor: default;
+    transition: transform .15s, box-shadow .15s;
+  }
+  .alert-item:hover {
+    transform: translateX(2px);
+    box-shadow: -4px 0 0 0 currentColor;
+  }
+  @keyframes fadeIn { from { opacity:0; transform: translateY(6px); } to { opacity:1; transform:none; } }
+  .alert-critical { background: var(--red-lt);   border-color: var(--red);   }
+  .alert-medium   { background: var(--amber-lt); border-color: var(--amber); }
+  .alert-minor    { background: var(--blue-lt);  border-color: var(--blue);  }
+  .alert-header   { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; }
+  .alert-badge {
+    font-family: var(--mono);
+    font-size: 8.5px;
+    letter-spacing: 0.12em;
+    padding: 3px 8px;
+    border-radius: 99px;
+    text-transform: uppercase;
+  }
+  .badge-c { background: var(--red);   color: #fff; }
+  .badge-m { background: var(--amber); color: #fff; }
+  .badge-n { background: var(--blue);  color: #fff; }
+  .alert-title { font-size: 13px; font-weight: 400; color: var(--ink); }
+  .alert-meta {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--ink-3);
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+    margin-bottom: 6px;
+  }
+  .alert-body { font-size: 12px; color: var(--ink-2); line-height: 1.6; }
+  .alert-sources { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+  .source-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.06em;
+    padding: 4px 10px;
+    border-radius: 99px;
+    border: 1px solid currentColor;
+    text-decoration: none;
+    transition: opacity .15s, transform .1s;
+    opacity: 0.75;
+  }
+  .source-link:hover { opacity: 1; transform: translateY(-1px); }
+  .source-link svg { flex-shrink: 0; }
+  .link-tp   { color: var(--green); }
+  .link-rd   { color: #ff4500; }
+  .link-fr   { color: var(--amber); }
+  .link-gg   { color: var(--blue); }
+  .link-ig   { color: #c13584; }
+  .link-tt   { color: var(--ink-2); }
+  .link-fb   { color: var(--blue); }
+  .alert-time {
+    font-family: var(--mono);
+    font-size: 9.5px;
+    color: var(--ink-4);
+    margin-left: auto;
+  }
+
+  /* ── CADENCE COLS ─────────────────────────────────────────── */
+  .cadence-col { padding: 18px; }
+  .cadence-head {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--paper-3);
+  }
+  .cadence-item {
+    font-size: 12px;
+    color: var(--ink-2);
+    padding: 5px 0;
+    border-bottom: 1px solid var(--paper-2);
+    line-height: 1.5;
+  }
+  .cadence-item:last-child { border-bottom: none; }
+
+  /* ── RESPONSE ─────────────────────────────────────────────── */
+  .response-card {
+    border: 1px solid var(--paper-3);
+    border-radius: var(--radius);
+    overflow: hidden;
+    margin-bottom: 12px;
+    transition: box-shadow .2s;
+  }
+  .response-card:hover { box-shadow: 0 4px 20px rgba(0,0,0,.06); }
+  .response-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 18px;
+    background: var(--paper-2);
+    border-bottom: 1px solid var(--paper-3);
+  }
+  .response-type {
+    font-weight: 400;
+    font-size: 13px;
+    color: var(--ink);
+  }
+  .response-sla {
+    font-family: var(--mono);
+    font-size: 9.5px;
+    letter-spacing: 0.08em;
+    padding: 3px 10px;
+    border-radius: 99px;
+  }
+  .sla-urgent { background: var(--red-lt); color: var(--red); }
+  .sla-medium { background: var(--amber-lt); color: var(--amber); }
+  .sla-std    { background: var(--green-lt); color: var(--green); }
+  .response-body-wrap {
+    padding: 16px 18px;
+  }
+  .response-sub {
+    font-family: var(--mono);
+    font-size: 9.5px;
+    color: var(--ink-4);
+    letter-spacing: 0.06em;
+    margin-bottom: 10px;
+  }
+  .response-quote {
+    font-family: var(--serif);
+    font-size: 14px;
+    font-style: italic;
+    color: var(--ink-2);
+    line-height: 1.7;
+    border-left: 2px solid var(--gold-lt);
+    padding-left: 14px;
+    margin-bottom: 10px;
+  }
+  .response-esc {
+    font-size: 11.5px;
+    color: var(--ink-3);
+    display: flex;
+    gap: 18px;
+    flex-wrap: wrap;
+  }
+  .esc-tag {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .esc-tag::before {
+    content: '→';
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--gold);
+  }
+
+  /* ── AI SECTION ───────────────────────────────────────────── */
+  .ai-block {
+    background: var(--paper-2);
+    border-radius: var(--radius);
+    padding: 20px 22px;
+    margin-bottom: 12px;
+    border-left: 2px solid var(--gold-lt);
+  }
+  .ai-q {
+    font-family: var(--mono);
+    font-size: 8.5px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--gold-dk);
+    margin-bottom: 8px;
+  }
+  .ai-a {
+    font-size: 13.5px;
+    color: var(--ink-2);
+    line-height: 1.75;
+  }
+  .risk-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 16px;
+  }
+  .risk-item {
+    background: var(--paper);
+    border: 1px solid var(--paper-3);
+    border-radius: var(--radius);
+    padding: 14px 16px;
+  }
+  .risk-label {
+    font-size: 12px;
+    color: var(--ink-3);
+    margin-bottom: 6px;
+  }
+  .risk-value {
+    font-family: var(--serif);
+    font-size: 28px;
+    font-weight: 300;
+    line-height: 1;
+  }
+  .risk-sub { font-size: 11px; color: var(--ink-4); margin-top: 4px; }
+
+  /* ── CONF BARS ────────────────────────────────────────────── */
+  .conf-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--paper-2);
+  }
+  .conf-row:last-child { border-bottom: none; }
+  .conf-label { font-size: 12px; color: var(--ink-2); flex: 1; }
+  .conf-bar-track {
+    width: 120px;
+    height: 4px;
+    background: var(--paper-3);
+    border-radius: 99px;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+  .conf-bar-fill {
+    height: 100%;
+    border-radius: 99px;
+    background: linear-gradient(90deg, var(--gold-lt), var(--gold));
+    transition: width 1.2s cubic-bezier(.4,0,.2,1);
+  }
+  .conf-pct {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--ink-3);
+    width: 32px;
+    text-align: right;
+    flex-shrink: 0;
+  }
+
+  /* ── GEO TABLE ────────────────────────────────────────────── */
+  .geo-table { width: 100%; border-collapse: collapse; }
+  .geo-table thead tr { border-bottom: 1px solid var(--paper-3); }
+  .geo-table thead th {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-4);
+    font-weight: 400;
+    padding: 0 12px 10px 0;
+    text-align: left;
+    white-space: nowrap;
+  }
+  .geo-table tbody tr {
+    border-bottom: 1px solid var(--paper-2);
+    transition: background .15s;
+  }
+  .geo-table tbody tr:last-child { border-bottom: none; }
+  .geo-table tbody tr:hover { background: var(--paper-2); }
+  .geo-table td {
+    padding: 10px 12px 10px 0;
+    vertical-align: middle;
+  }
+  .geo-flag-cell { width: 32px; font-size: 20px; line-height: 1; padding-right: 6px !important; }
+  .geo-market-cell { font-size: 13px; color: var(--ink-2); font-weight: 400; min-width: 130px; }
+  .geo-score-cell { font-family: var(--mono); font-size: 14px; min-width: 52px; white-space: nowrap; }
+  .geo-trend-cell { font-family: var(--mono); font-size: 10px; color: var(--ink-4); white-space: nowrap; min-width: 70px; }
+  .geo-signal-cell { font-size: 11.5px; color: var(--ink-3); line-height: 1.4; }
+  .geo-bar-cell { width: 110px; }
+  .geo-bar-track { height: 4px; background: var(--paper-3); border-radius: 99px; overflow: hidden; }
+  .geo-bar-fill { height: 100%; border-radius: 99px; }
+  .geo-tag {
+    display: inline-block;
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.06em;
+    padding: 2px 7px;
+    border-radius: 99px;
+    margin-left: 6px;
+    vertical-align: middle;
+  }
+  .geo-tag-warn { background: var(--amber-lt); color: var(--amber); }
+  .geo-tag-ok   { background: var(--green-lt); color: var(--green); }
+  .geo-tag-crit { background: var(--red-lt);   color: var(--red);   }
+
+  /* ── KEYWORD TAGS ─────────────────────────────────────────── */
+  .tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+  .tag {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.06em;
+    padding: 4px 10px;
+    border-radius: 99px;
+    border: 1px solid var(--paper-3);
+    color: var(--ink-3);
+    background: var(--paper);
+  }
+  .tag-spike {
+    background: var(--red-lt);
+    border-color: var(--red-lt);
+    color: var(--red);
+  }
+
+  /* ── CHART ────────────────────────────────────────────────── */
+  .chart-wrap {
+    position: relative;
+    width: 100%;
+    height: 160px;
+  }
+
+  /* ── SCROLLED REVEAL ─────────────────────────────────────── */
+  .fade-up {
+    opacity: 0;
+    transform: translateY(14px);
+    transition: opacity .5s ease, transform .5s ease;
+  }
+  .fade-up.visible { opacity: 1; transform: none; }
+
+  /* ── FOOTER ───────────────────────────────────────────────── */
+  .footer-strip {
+    border-top: 1px solid var(--paper-3);
+    padding: 16px 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .footer-note {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: 0.1em;
+    color: var(--ink-4);
+    text-transform: uppercase;
+  }
+
+  /* ── RESPONSIVE ───────────────────────────────────────────── */
+  @media (max-width: 860px) {
+    .kpi-strip { grid-template-columns: repeat(3,1fr); }
+    .grid-2, .grid-3 { grid-template-columns: 1fr; }
+    .col-span-2 { grid-column: span 1; }
+    .platform-item { grid-template-columns: 24px 90px 1fr 40px; }
+    .plat-vol, .plat-delta { display: none; }
+  }
+  @media (max-width: 600px) {
+    .masthead { padding: 0 16px; }
+    .shell { padding: 20px 16px 48px; }
+    .kpi-strip { grid-template-columns: 1fr 1fr; }
+    .masthead-nav { gap: 0; padding: 0 8px; }
+    .nav-tab { padding: 0 10px; font-size: 9px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- MASTHEAD -->
+<header class="masthead">
+  <div class="masthead-brand">
+    <div class="masthead-eyebrow">Brand Intelligence</div>
+    <div class="masthead-title">Memo Paris</div>
+  </div>
+  <nav class="masthead-nav">
+    <div class="nav-tab active" onclick="switchView('overview',this)">Overview</div>
+    <div class="nav-tab" onclick="switchView('platforms',this)">Platforms</div>
+    <div class="nav-tab" onclick="switchView('alerts',this)">Alerts</div>
+    <div class="nav-tab" onclick="switchView('response',this)">Response</div>
+    <div class="nav-tab" onclick="switchView('ai',this)">AI Layer</div>
+  </nav>
+  <div class="masthead-meta">
+    <div class="pulse-dot"></div>
+    <span class="masthead-time" id="clock">—</span>
+    <span class="alert-pill pill-critical">2 Critical</span>
+    <span class="alert-pill pill-medium">4 Medium</span>
+  </div>
+</header>
+
+<!-- ═══════════════════════════════════════════════════
+     VIEW: OVERVIEW
+═══════════════════════════════════════════════════ -->
+<div class="view active" id="view-overview">
+<div class="shell">
+
+  <div class="section-header" style="margin-top:8px">
+    <span class="section-num">01</span>
+    <h1 class="section-title">Brand Sentiment Health</h1>
+  </div>
+  <div class="section-rule"></div>
+
+  <!-- KPI strip -->
+  <div class="kpi-strip fade-up">
+    <div class="kpi-cell">
+      <div class="kpi-eyebrow">Weighted score</div>
+      <div class="kpi-value">4.2 <sup style="font-size:16px;font-weight:400;color:var(--ink-3)">/5</sup></div>
+      <div class="kpi-delta delta-neg">▼ 0.1 vs prior 30d</div>
+      <div class="kpi-accent accent-red"></div>
+    </div>
+    <div class="kpi-cell">
+      <div class="kpi-eyebrow">Net sentiment</div>
+      <div class="kpi-value">+62<sup style="font-size:20px;font-weight:400;color:var(--ink-2)">%</sup></div>
+      <div class="kpi-delta delta-neg">▼ 4 pts month-on-month</div>
+      <div class="kpi-accent accent-amber"></div>
+    </div>
+    <div class="kpi-cell">
+      <div class="kpi-eyebrow">Review volume</div>
+      <div class="kpi-value">318</div>
+      <div class="kpi-delta delta-pos">▲ +22% vs baseline</div>
+      <div class="kpi-accent accent-green"></div>
+    </div>
+    <div class="kpi-cell">
+      <div class="kpi-eyebrow">Response rate</div>
+      <div class="kpi-value">71<sup style="font-size:20px;font-weight:400;color:var(--ink-2)">%</sup></div>
+      <div class="kpi-delta delta-neg">▼ Below 85% SLA</div>
+      <div class="kpi-accent accent-red"></div>
+    </div>
+    <div class="kpi-cell">
+      <div class="kpi-eyebrow">AI confidence</div>
+      <div class="kpi-value">84<sup style="font-size:20px;font-weight:400;color:var(--ink-2)">%</sup></div>
+      <div class="kpi-delta delta-neu">Stable</div>
+      <div class="kpi-accent accent-gold"></div>
+    </div>
+  </div>
+
+  <div class="grid-2" style="margin-top:16px">
+
+    <!-- Trend chart -->
+    <div class="card fade-up">
+      <div class="card-label">30-day score trend</div>
+      <div class="chart-wrap">
+        <canvas id="trendChart" role="img" aria-label="30-day weighted score trend for Memo Paris">Score trend data.</canvas>
+      </div>
+    </div>
+
+    <!-- Sentiment -->
+    <div class="card fade-up">
+      <div class="card-label">Sentiment distribution</div>
+      <div class="sentiment-track" style="margin-top:10px">
+        <div class="seg-pos" style="width:67%"></div>
+        <div class="seg-neu" style="width:18%"></div>
+        <div class="seg-neg" style="width:15%"></div>
+      </div>
+      <div class="legend">
+        <span><span class="legend-swatch" style="background:var(--green)"></span>Positive 67%</span>
+        <span><span class="legend-swatch" style="background:var(--paper-3)"></span>Neutral 18%</span>
+        <span><span class="legend-swatch" style="background:var(--red)"></span>Negative 15%</span>
+      </div>
+      <p style="font-size:12px;color:var(--ink-3);margin-top:14px;line-height:1.6">
+        Negative sentiment trending +3 pts month-on-month, primarily driven by shipping and delivery themes correlated with April 28 logistics transition.
+      </p>
+
+      <div style="margin-top:18px">
+        <div class="card-label">Top complaint themes</div>
+        <div class="topic-row">
+          <span class="topic-label">Delivery / shipping</span>
+          <div class="bar-track"><div class="bar-fill" style="width:72%;background:var(--red)"></div></div>
+          <span class="topic-pct delta-neg">72%</span>
+        </div>
+        <div class="topic-row">
+          <span class="topic-label">Packaging damage</span>
+          <div class="bar-track"><div class="bar-fill" style="width:44%;background:var(--amber)"></div></div>
+          <span class="topic-pct" style="color:var(--amber)">44%</span>
+        </div>
+        <div class="topic-row">
+          <span class="topic-label">Customer service</span>
+          <div class="bar-track"><div class="bar-fill" style="width:31%;background:var(--amber)"></div></div>
+          <span class="topic-pct" style="color:var(--amber)">31%</span>
+        </div>
+        <div class="topic-row">
+          <span class="topic-label">Fragrance longevity</span>
+          <div class="bar-track"><div class="bar-fill" style="width:18%;background:var(--ink-4)"></div></div>
+          <span class="topic-pct">18%</span>
+        </div>
+        <div class="topic-row">
+          <span class="topic-label">Stock availability</span>
+          <div class="bar-track"><div class="bar-fill" style="width:12%;background:var(--ink-4)"></div></div>
+          <span class="topic-pct">12%</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Geo -->
+  <div class="card fade-up" style="margin-top:16px">
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:14px">
+      <div class="card-label" style="margin-bottom:0">Market-level scores — 30-day window</div>
+      <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+        <div style="position:relative">
+          <input id="geo-search" type="text" placeholder="Filter country…" oninput="renderGeoTable()" style="font-family:var(--mono);font-size:10px;letter-spacing:0.06em;padding:5px 28px 5px 10px;border:1px solid var(--paper-3);border-radius:var(--radius);background:var(--paper-2);color:var(--ink);outline:none;width:140px" onfocus="this.style.borderColor='var(--gold)'" onblur="this.style.borderColor='var(--paper-3)'">
+          <svg style="position:absolute;right:8px;top:50%;transform:translateY(-50%);pointer-events:none" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="var(--ink-4)" stroke-width="2.5" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        </div>
+        <button id="sort-btn" onclick="toggleSort()" style="font-family:var(--mono);font-size:10px;letter-spacing:0.08em;padding:5px 12px;border:1px solid var(--paper-3);border-radius:var(--radius);background:var(--paper-2);color:var(--ink-3);cursor:pointer;transition:all .15s;white-space:nowrap" onmouseover="this.style.borderColor='var(--gold)';this.style.color='var(--gold-dk)'" onmouseout="this.style.borderColor='var(--paper-3)';this.style.color='var(--ink-3)'">
+          ↕ Score: High → Low
+        </button>
+        <span id="geo-count" style="font-family:var(--mono);font-size:10px;color:var(--ink-4)">12 markets</span>
+      </div>
+    </div>
+    <table class="geo-table">
+      <thead>
+        <tr>
+          <th style="width:32px"></th>
+          <th>Market</th>
+          <th>Score</th>
+          <th>Trend</th>
+          <th style="width:110px">Rating</th>
+          <th>Signal</th>
+        </tr>
+      </thead>
+      <tbody id="geo-tbody"></tbody>
+    </table>
+    <div id="geo-empty" style="display:none;text-align:center;padding:24px 0;font-family:var(--mono);font-size:11px;color:var(--ink-4)">No markets match that filter</div>
+  </div>
+
+  <script>
+  const GEO_DATA = [
+    { flag:'🇸🇦', market:'GCC / UAE',     score:4.6, barW:92, barC:'var(--green)',  trend:'▲ +0.1', trendC:'pos', tag:'Top market', tagC:'ok',   signal:'Strong positive across all channels · gifting segment dominant' },
+    { flag:'🇫🇷', market:'France',         score:4.5, barW:90, barC:'var(--green)',  trend:'— Stable', trendC:'neu', tag:'',          tagC:'',     signal:'Domestic flagship strong · no material issues detected' },
+    { flag:'🇨🇭', market:'Switzerland',    score:4.4, barW:88, barC:'var(--green)',  trend:'▲ +0.1', trendC:'pos', tag:'',           tagC:'',     signal:'Retail performance strong · Zurich & Geneva boutiques' },
+    { flag:'🇰🇷', market:'South Korea',    score:4.4, barW:88, barC:'var(--green)',  trend:'▲ +0.3', trendC:'pos', tag:'',           tagC:'',     signal:'Strong growth · K-beauty adjacent interest · gifting key' },
+    { flag:'🇩🇪', market:'Germany',        score:4.3, barW:86, barC:'var(--green)',  trend:'— Stable', trendC:'neu', tag:'',          tagC:'',     signal:'Stable · selective retail partners performing well' },
+    { flag:'🇸🇬', market:'Singapore / SEA',score:4.3, barW:86, barC:'var(--green)',  trend:'▲ +0.2', trendC:'pos', tag:'',           tagC:'',     signal:'Fast-growing · luxury retail penetration increasing' },
+    { flag:'🇮🇹', market:'Italy',          score:4.2, barW:84, barC:'var(--green)',  trend:'— Stable', trendC:'neu', tag:'',          tagC:'',     signal:'Stable · Milan retail performing · no complaints' },
+    { flag:'🇺🇸', market:'USA',            score:4.1, barW:82, barC:'var(--amber)',  trend:'▼ −0.2', trendC:'neg', tag:'Watch',      tagC:'warn', signal:'Shipping delays noted · cross-border carrier issue · CS flagged' },
+    { flag:'🇯🇵', market:'Japan',          score:4.1, barW:82, barC:'var(--green)',  trend:'— Stable', trendC:'neu', tag:'',          tagC:'',     signal:'Niche-enthusiast positive · retailer partnerships solid' },
+    { flag:'🇬🇧', market:'UK',             score:4.0, barW:80, barC:'var(--amber)',  trend:'▼ −0.2', trendC:'neg', tag:'Watch',      tagC:'warn', signal:'Post-Brexit customs delays flagged in reviews · DHL issues' },
+    { flag:'🇨🇦', market:'Canada',         score:4.0, barW:80, barC:'var(--ink-4)',  trend:'— Stable', trendC:'neu', tag:'',          tagC:'',     signal:'Limited volume · low complaint density · monitor quarterly' },
+    { flag:'🇦🇺', market:'Australia',      score:3.9, barW:78, barC:'var(--red)',    trend:'▼ −0.3', trendC:'neg', tag:'Alert',      tagC:'crit', signal:'Delivery time complaints dominant · courier partner review needed' },
+  ];
+
+  let geoSortAsc = false;
+
+  function scoreClass(s) {
+    if (s >= 4.3) return 'delta-pos';
+    if (s >= 4.0) return 'delta-neu';
+    return 'delta-neg';
+  }
+
+  function renderGeoTable() {
+    const q = (document.getElementById('geo-search').value || '').toLowerCase().trim();
+    let rows = GEO_DATA.filter(r => !q || r.market.toLowerCase().includes(q));
+    rows = geoSortAsc
+      ? [...rows].sort((a,b) => a.score - b.score)
+      : [...rows].sort((a,b) => b.score - a.score);
+
+    const tbody = document.getElementById('geo-tbody');
+    const empty = document.getElementById('geo-empty');
+    const count = document.getElementById('geo-count');
+
+    if (!rows.length) {
+      tbody.innerHTML = '';
+      empty.style.display = 'block';
+      count.textContent = '0 markets';
+      return;
+    }
+    empty.style.display = 'none';
+    count.textContent = rows.length + (rows.length === 1 ? ' market' : ' markets');
+
+    tbody.innerHTML = rows.map(r => {
+      const sc = scoreClass(r.score);
+      const tc = r.trendC === 'pos' ? 'delta-pos' : r.trendC === 'neg' ? 'delta-neg' : 'delta-neu';
+      const tagHtml = r.tag ? `<span class="geo-tag geo-tag-${r.tagC}">${r.tag}</span>` : '';
+      return `<tr>
+        <td class="geo-flag-cell">${r.flag}</td>
+        <td class="geo-market-cell">${r.market}${tagHtml}</td>
+        <td class="geo-score-cell ${sc}">${r.score.toFixed(1)}</td>
+        <td class="geo-trend-cell ${tc}">${r.trend}</td>
+        <td class="geo-bar-cell"><div class="geo-bar-track"><div class="geo-bar-fill" style="width:${r.barW}%;background:${r.barC}"></div></div></td>
+        <td class="geo-signal-cell">${r.signal}</td>
+      </tr>`;
+    }).join('');
+  }
+
+  function toggleSort() {
+    geoSortAsc = !geoSortAsc;
+    const btn = document.getElementById('sort-btn');
+    btn.textContent = geoSortAsc ? '↕ Score: Low → High' : '↕ Score: High → Low';
+    renderGeoTable();
+  }
+
+  renderGeoTable();
+  </script>
+
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     VIEW: PLATFORMS
+═══════════════════════════════════════════════════ -->
+<div class="view" id="view-platforms">
+<div class="shell">
+  <div class="section-header" style="margin-top:8px">
+    <span class="section-num">02</span>
+    <h2 class="section-title">Platform-by-Platform</h2>
+  </div>
+  <div class="section-rule"></div>
+
+  <div class="card fade-up">
+    <div class="card-label">Platform health — 30-day window</div>
+    <div class="platform-item" style="font-family:var(--mono);font-size:9px;letter-spacing:.1em;color:var(--ink-4);text-transform:uppercase;padding-bottom:8px;">
+      <span></span><span>Platform</span><span></span><span style="text-align:right">Score</span><span style="text-align:right">Change</span><span style="text-align:right">Volume</span>
+    </div>
+    <div class="platform-item">
+      <span class="platform-logo"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="24" height="24" rx="4" fill="#00B67A"/><path d="M12 2l2.6 8H22l-6.2 4.5 2.4 7.5L12 17.5l-6.2 4.5 2.4-7.5L2 10h7.4L12 2z" fill="white"/></svg></span>
+      <span class="platform-name">Trustpilot</span>
+      <div class="bar-track"><div class="bar-fill" id="bar-tp" style="width:0%;background:var(--green)"></div></div>
+      <span class="plat-score">4.1</span>
+      <span class="plat-delta delta-neg">▼ −0.2</span>
+      <span class="plat-vol">124 reviews</span>
+    </div>
+    <div class="platform-item">
+      <span class="platform-logo"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="24" height="24" rx="4" fill="#F5821F"/><path d="M12 4C7.6 4 4 7.6 4 12s3.6 8 8 8 8-3.6 8-8-3.6-8-8-8zm0 3l1.8 5.4H19l-4.3 3.1 1.6 5.1L12 17.4l-4.3 3.2 1.6-5.1L5 12.4h5.2L12 7z" fill="white"/></svg></span>
+      <span class="platform-name">Judge.me</span>
+      <div class="bar-track"><div class="bar-fill" id="bar-jm" style="width:0%;background:var(--green)"></div></div>
+      <span class="plat-score">4.4</span>
+      <span class="plat-delta delta-pos">▲ +0.1</span>
+      <span class="plat-vol">67 reviews</span>
+    </div>
+    <div class="platform-item">
+      <span class="platform-logo"><svg width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><rect width="24" height="24" rx="4" fill="#fff" stroke="#e0e0e0" stroke-width="1"/><path d="M21.8 12.2c0-.7-.1-1.3-.2-2H12v3.8h5.5c-.2 1.2-1 2.3-2.1 3v2.5h3.4c2-1.8 3-4.5 3-7.3z" fill="#4285F4"/><path d="M12 22c2.7 0 5-0.9 6.7-2.4l-3.4-2.5c-.9.6-2 1-3.3 1-2.5 0-4.7-1.7-5.4-4H3v2.6C4.8 19.9 8.2 22 12 22z" fill="#34A853"/><path d="M6.6 14.1c-.2-.6-.3-1.3-.3-2s.1-1.4.3-2V7.5H3C2.4 8.8 2 10.4 2 12s.4 3.2 1 4.5l3.6-2.4z" fill="#FBBC04"/><path d="M12 5.9c1.4 0 2.7.5 3.7 1.4l2.8-2.8C16.9 2.9 14.7 2 12 2 8.2 2 4.8 4.1 3 7.5l3.6 2.6C7.3 7.6 9.5 5.9 12 5.9z" fill="#EA4335"/></svg></span>
+      <span class="platform-name">Google</span>
+      <div class="bar-track"><div class="bar-fill" id="bar-gg" style="width:0%;background:var(--green)"></div></div>
+      <span class="plat-score">4.2</span>
+      <span class="plat-delta delta-neu">— Stable</span>
+      <span class="plat-vol">51 reviews</span>
+    </div>
+    <div class="platform-item">
+      <span class="platform-logo"><svg width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="ig-g" x1="0%" y1="100%" x2="100%" y2="0%"><stop offset="0%" stop-color="#F58529"/><stop offset="50%" stop-color="#DD2A7B"/><stop offset="100%" stop-color="#515BD4"/></linearGradient></defs><rect width="24" height="24" rx="5" fill="url(#ig-g)"/><rect x="6" y="6" width="12" height="12" rx="3.5" fill="none" stroke="white" stroke-width="1.5"/><circle cx="12" cy="12" r="3" fill="none" stroke="white" stroke-width="1.5"/><circle cx="16.2" cy="7.8" r="0.9" fill="white"/></svg></span>
+      <span class="platform-name">Instagram</span>
+      <div class="bar-track"><div class="bar-fill" id="bar-ig" style="width:0%;background:var(--green)"></div></div>
+      <span class="plat-score">4.0</span>
+      <span class="plat-delta delta-neg">▼ −0.1</span>
+      <span class="plat-vol">~180 mentions</span>
+    </div>
+    <div class="platform-item">
+      <span class="platform-logo"><svg width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><rect width="24" height="24" rx="4" fill="#010101"/><path d="M19 8.3c-1.3 0-2.4-.8-2.8-2h-2.3v8.2c0 1-.8 1.8-1.8 1.8s-1.8-.8-1.8-1.8.8-1.8 1.8-1.8c.2 0 .4 0 .6.1V10.5c-.2 0-.4-.1-.6-.1-2.3 0-4.1 1.8-4.1 4.1s1.8 4.1 4.1 4.1 4.1-1.8 4.1-4.1V10c.8.5 1.8.8 2.8.8V8.3z" fill="white"/></svg></span>
+      <span class="platform-name">TikTok</span>
+      <div class="bar-track"><div class="bar-fill" id="bar-tt" style="width:0%;background:var(--amber)"></div></div>
+      <span class="plat-score" style="color:var(--amber)">3.5</span>
+      <span class="plat-delta delta-neg">▼ −0.5</span>
+      <span class="plat-vol">~94 videos</span>
+    </div>
+    <div class="platform-item">
+      <span class="platform-logo"><svg width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><rect width="24" height="24" rx="4" fill="#1877F2"/><path d="M16 8h-2c-.6 0-1 .4-1 1v2h3l-.4 3H13v7h-3v-7H8v-3h2V9c0-2.2 1.8-4 4-4h2v3z" fill="white"/></svg></span>
+      <span class="platform-name">Facebook</span>
+      <div class="bar-track"><div class="bar-fill" id="bar-fb" style="width:0%;background:var(--amber)"></div></div>
+      <span class="plat-score">3.8</span>
+      <span class="plat-delta delta-neg">▼ −0.1</span>
+      <span class="plat-vol">~42 comments</span>
+    </div>
+    <div class="platform-item">
+      <span class="platform-logo"><svg width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><rect width="24" height="24" rx="4" fill="#E60023"/><path d="M12 2C6.5 2 2 6.5 2 12c0 4.2 2.6 7.8 6.3 9.3-.1-.8-.1-2 .2-2.9l1.3-5.5s-.3-.7-.3-1.7c0-1.6.9-2.8 2.3-2.8 1.1 0 1.6.8 1.6 1.8 0 1.1-.7 2.7-1.1 4.2-.3 1.2.6 2.2 1.8 2.2 2.2 0 3.7-2.8 3.7-6.1 0-2.5-1.7-4.4-4.5-4.4-3.3 0-5.3 2.4-5.3 5.1 0 .9.3 1.6.7 2.1.2.2.2.3.1.6l-.3 1c-.1.3-.3.4-.6.3-1.7-.7-2.5-2.6-2.5-4.7 0-3.5 2.9-7.7 8.7-7.7 4.6 0 7.6 3.3 7.6 6.9 0 4.7-2.6 8.2-6.5 8.2-1.3 0-2.5-.7-2.9-1.5l-.8 3.1c-.3 1-.9 2-1.4 2.7.9.3 1.9.4 2.8.4 5.5 0 10-4.5 10-10S17.5 2 12 2z" fill="white"/></svg></span>
+      <span class="platform-name">Pinterest</span>
+      <div class="bar-track"><div class="bar-fill" id="bar-pt" style="width:0%;background:var(--green)"></div></div>
+      <span class="plat-score delta-pos">4.3</span>
+      <span class="plat-delta delta-pos">▲ +0.2</span>
+      <span class="plat-vol">~310 pins</span>
+    </div>
+    <div class="platform-item">
+      <span class="platform-logo"><svg width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><rect width="24" height="24" rx="4" fill="#8B1A4A"/><path d="M12 3c-1.7 0-3 1.3-3 3 0 1 .5 1.9 1.3 2.4C8.5 9.1 7 10.9 7 13c0 2.8 2.2 5 5 5s5-2.2 5-5c0-2.1-1.5-3.9-3.3-4.6.8-.5 1.3-1.4 1.3-2.4 0-1.7-1.3-3-3-3zm0 2c.6 0 1 .4 1 1s-.4 1-1 1-1-.4-1-1 .4-1 1-1zm0 4c1.7 0 3 1.3 3 3s-1.3 3-3 3-3-1.3-3-3 1.3-3 3-3z" fill="white"/></svg></span>
+      <span class="platform-name">Fragrantica</span>
+      <div class="bar-track"><div class="bar-fill" id="bar-fr" style="width:0%;background:var(--amber)"></div></div>
+      <span class="plat-score">3.9</span>
+      <span class="plat-delta delta-neg">▼ −0.3</span>
+      <span class="plat-vol">38 reviews</span>
+    </div>
+    <div class="platform-item">
+      <span class="platform-logo"><svg width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><rect width="24" height="24" rx="4" fill="#FF4500"/><path d="M22 12c0-1.1-.9-2-2-2-.5 0-1 .2-1.4.5C17.2 9.6 15.4 9 13.5 8.9l.9-4.2 2.9.6c0 .8.7 1.5 1.5 1.5s1.5-.7 1.5-1.5-.7-1.5-1.5-1.5c-.6 0-1.1.4-1.4.9l-3.3-.7c-.2 0-.3.1-.4.3l-1 4.7c-1.9.1-3.6.7-4.9 1.6C7 9.8 6.5 9.6 6 9.6c-1.1 0-2 .9-2 2 0 .7.4 1.4 1 1.7 0 .2-.1.5-.1.7 0 3.3 3.6 6 8 6s8-2.7 8-6c0-.2 0-.4-.1-.7.6-.3 1.2-1 1.2-1.7zm-13 1c0-.8.7-1.5 1.5-1.5s1.5.7 1.5 1.5-.7 1.5-1.5 1.5-1.5-.7-1.5-1.5zm8.5 3.5c-.9.9-2.4 1.4-4.5 1.4s-3.6-.5-4.5-1.4c-.2-.2-.2-.5 0-.7s.5-.2.7 0c.7.7 2 1.1 3.8 1.1s3.1-.4 3.8-1.1c.2-.2.5-.2.7 0s.2.5 0 .7zm-.5-2c-.8 0-1.5-.7-1.5-1.5s.7-1.5 1.5-1.5 1.5.7 1.5 1.5-.7 1.5-1.5 1.5z" fill="white"/></svg></span>
+      <span class="platform-name">Reddit</span>
+      <div class="bar-track"><div class="bar-fill" id="bar-rd" style="width:0%;background:var(--amber)"></div></div>
+      <span class="plat-score" style="color:var(--amber)">3.6</span>
+      <span class="plat-delta delta-neg">▼ −0.4</span>
+      <span class="plat-vol">28 threads</span>
+    </div>
+    <div class="platform-item">
+      <span class="platform-logo"><svg width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><rect width="24" height="24" rx="4" fill="#000"/><path d="M17.5 3h3l-6.5 7.4L21.5 21h-5.9l-4.2-5.5L6.3 21H3.2l6.9-7.9L3 3h6.1l3.8 5 4.6-5zM16.6 19.3h1.6L7.5 4.7H5.8l10.8 14.6z" fill="white"/></svg></span>
+      <span class="platform-name">X</span>
+      <div class="bar-track"><div class="bar-fill" id="bar-xi" style="width:0%;background:var(--amber)"></div></div>
+      <span class="plat-score">3.7</span>
+      <span class="plat-delta delta-neg">▼ −0.2</span>
+      <span class="plat-vol">~28 signals</span>
+    </div>
+  </div>
+
+  <div class="grid-3" style="margin-top:16px">
+
+    <div class="card fade-up">
+      <div class="card-label">Trustpilot — keyword signals</div>
+      <p style="font-size:12px;color:var(--ink-3);line-height:1.6;margin-bottom:4px">62% of 1-star reviews mention <em>delivery</em> or <em>leak</em>. Spike +38% in last 10 days.</p>
+      <div class="tags">
+        <span class="tag tag-spike">delivery</span>
+        <span class="tag tag-spike">leak</span>
+        <span class="tag">packaging</span>
+        <span class="tag">slow</span>
+        <span class="tag">no response</span>
+        <span class="tag">refund</span>
+      </div>
+      <div class="alert-sources" style="margin-top:10px"><a class="source-link link-tp" href="https://www.trustpilot.com/review/memo-paris.com?sort=recency" target="_blank" rel="noopener"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15,3 21,3 21,9"/><line x1="10" y1="14" x2="21" y2="3"/></svg> All reviews — newest first</a><a class="source-link link-tp" href="https://www.trustpilot.com/review/memo-paris.com?stars=1" target="_blank" rel="noopener"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15,3 21,3 21,9"/><line x1="10" y1="14" x2="21" y2="3"/></svg> 1-star reviews</a><a class="source-link link-tp" href="https://www.trustpilot.com/review/memo-paris.com?stars=2" target="_blank" rel="noopener"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15,3 21,3 21,9"/><line x1="10" y1="14" x2="21" y2="3"/></svg> 2-star reviews</a><a class="source-link link-tp" href="https://business.trustpilot.com/" target="_blank" rel="noopener"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15,3 21,3 21,9"/><line x1="10" y1="14" x2="21" y2="3"/></svg> Business reply queue</a></div>
+    </div>
+
+    <div class="card fade-up">
+      <div class="card-label">Reddit r/fragrance — thread signals</div>
+      <p style="font-size:12px;color:var(--ink-3);line-height:1.6;margin-bottom:4px">1 thread at 280 upvotes on shipping damage. Viral threshold: 300. Monitor hourly.</p>
+      <div class="tags">
+        <span class="tag tag-spike">shipping damage</span>
+        <span class="tag">worth it?</span>
+        <span class="tag">quality</span>
+        <span class="tag">overpriced</span>
+        <span class="tag">gifting</span>
+      </div>
+      <div class="alert-sources" style="margin-top:10px"><a class="source-link link-rd" href="https://www.reddit.com/r/fragrance/search/?q=memo+paris&sort=new" target="_blank" rel="noopener"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15,3 21,3 21,9"/><line x1="10" y1="14" x2="21" y2="3"/></svg> r/fragrance — new</a><a class="source-link link-rd" href="https://www.reddit.com/r/fragrance/search/?q=memo+paris&sort=top&t=month" target="_blank" rel="noopener"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15,3 21,3 21,9"/><line x1="10" y1="14" x2="21" y2="3"/></svg> r/fragrance — top month</a><a class="source-link link-rd" href="https://www.reddit.com/r/Perfumes/search/?q=memo+paris&sort=new" target="_blank" rel="noopener"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15,3 21,3 21,9"/><line x1="10" y1="14" x2="21" y2="3"/></svg> r/Perfumes — new</a><a class="source-link link-rd" href="https://www.reddit.com/r/fragrance/search/?q=memo+paris+damaged&sort=top" target="_blank" rel="noopener"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15,3 21,3 21,9"/><line x1="10" y1="14" x2="21" y2="3"/></svg> damaged threads</a></div>
+    </div>
+
+    <div class="card fade-up">
+      <div class="card-label">Fragrantica — community signals</div>
+      <p style="font-size:12px;color:var(--ink-3);line-height:1.6;margin-bottom:4px">Community-flagged reformulation risk. 4 independent mentions. Product team review needed.</p>
+      <div class="tags">
+        <span class="tag tag-spike">reformulation?</span>
+        <span class="tag tag-spike">batch variation</span>
+        <span class="tag">weak longevity</span>
+        <span class="tag">sillage</span>
+      </div>
+      <div class="alert-sources" style="margin-top:10px"><a class="source-link link-fr" href="https://www.fragrantica.com/designers/Memo-Paris.html" target="_blank" rel="noopener"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15,3 21,3 21,9"/><line x1="10" y1="14" x2="21" y2="3"/></svg> Brand page</a><a class="source-link link-fr" href="https://www.fragrantica.com/search/?query=memo+paris" target="_blank" rel="noopener"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15,3 21,3 21,9"/><line x1="10" y1="14" x2="21" y2="3"/></svg> All fragrance reviews</a><a class="source-link link-fr" href="https://www.fragrantica.com/board/viewforum.php?f=3" target="_blank" rel="noopener"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15,3 21,3 21,9"/><line x1="10" y1="14" x2="21" y2="3"/></svg> Community forum</a></div>
+    </div>
+
+    <div class="card fade-up">
+      <div class="card-label">Judge.me — product signals</div>
+      <p style="font-size:12px;color:var(--ink-3);line-height:1.6;margin-bottom:4px">Strongest positive channel (4.4/5). Stock complaints on 3 SKUs may suppress conversion.</p>
+      <div class="tags">
+        <span class="tag tag-spike">out of stock</span>
+        <span class="tag">beautiful</span>
+        <span class="tag">gift</span>
+        <span class="tag">unique</span>
+        <span class="tag">reorder</span>
+      </div>
+      <div class="alert-sources" style="margin-top:10px"><a class="source-link link-tp" href="https://judge.me/reviews/memo-paris" target="_blank" rel="noopener"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15,3 21,3 21,9"/><line x1="10" y1="14" x2="21" y2="3"/></svg> All product reviews</a><a class="source-link link-tp" href="https://judge.me/reviews/memo-paris?rating=1" target="_blank" rel="noopener"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15,3 21,3 21,9"/><line x1="10" y1="14" x2="21" y2="3"/></svg> 1-star reviews</a><a class="source-link link-tp" href="https://judge.me/reviews/memo-paris?rating=2" target="_blank" rel="noopener"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15,3 21,3 21,9"/><line x1="10" y1="14" x2="21" y2="3"/></svg> 2-star reviews</a></div>
+    </div>
+
+    <div class="card fade-up">
+      <div class="card-label" style="display:flex;align-items:center;gap:7px">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" style="flex-shrink:0"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.34 6.34 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.69a8.18 8.18 0 004.79 1.54V6.77a4.85 4.85 0 01-1.02-.08z" fill="var(--ink-3)"/></svg>
+        TikTok — video &amp; comment signals
+      </div>
+      <p style="font-size:12px;color:var(--ink-3);line-height:1.6;margin-bottom:4px">94 brand-tagged videos. Unboxing content strong. Negative comment clusters on 2 viral delivery complaint videos — combined 18k views.</p>
+      <div class="tags">
+        <span class="tag tag-spike">damaged delivery</span>
+        <span class="tag tag-spike">no reply from brand</span>
+        <span class="tag">unboxing</span>
+        <span class="tag">luxury haul</span>
+        <span class="tag">scent review</span>
+        <span class="tag">gifting inspo</span>
+      </div>
+      <div class="alert-sources" style="margin-top:10px"><a class="source-link link-tt" href="https://www.tiktok.com/search?q=memo+paris" target="_blank" rel="noopener"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15,3 21,3 21,9"/><line x1="10" y1="14" x2="21" y2="3"/></svg> Search — memo paris</a><a class="source-link link-tt" href="https://www.tiktok.com/search?q=memo+paris+delivery" target="_blank" rel="noopener"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15,3 21,3 21,9"/><line x1="10" y1="14" x2="21" y2="3"/></svg> Delivery complaint videos</a><a class="source-link link-tt" href="https://www.tiktok.com/@memoparis" target="_blank" rel="noopener"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15,3 21,3 21,9"/><line x1="10" y1="14" x2="21" y2="3"/></svg> Official account</a><a class="source-link link-tt" href="https://www.tiktok.com/search?q=%23memoparis" target="_blank" rel="noopener"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15,3 21,3 21,9"/><line x1="10" y1="14" x2="21" y2="3"/></svg> #memoparis hashtag</a></div>
+    </div>
+
+    <div class="card fade-up">
+      <div class="card-label" style="display:flex;align-items:center;gap:7px">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" style="flex-shrink:0"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" fill="var(--ink-3)"/></svg>
+        Facebook — comment &amp; page signals
+      </div>
+      <p style="font-size:12px;color:var(--ink-3);line-height:1.6;margin-bottom:4px">42 brand-page comments monitored. Older demographic — gifting and in-store experience dominant. Customer service complaints visible on ad posts.</p>
+      <div class="tags">
+        <span class="tag tag-spike">ad comment complaints</span>
+        <span class="tag">gifting</span>
+        <span class="tag">where to buy</span>
+        <span class="tag">in-store</span>
+        <span class="tag">price query</span>
+      </div>
+      <div class="alert-sources" style="margin-top:10px"><a class="source-link link-fb" href="https://www.facebook.com/memoparis" target="_blank" rel="noopener"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15,3 21,3 21,9"/><line x1="10" y1="14" x2="21" y2="3"/></svg> Brand page</a><a class="source-link link-fb" href="https://www.facebook.com/memoparis/reviews" target="_blank" rel="noopener"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15,3 21,3 21,9"/><line x1="10" y1="14" x2="21" y2="3"/></svg> Page reviews</a><a class="source-link link-fb" href="https://www.facebook.com/search/posts?q=memo+paris" target="_blank" rel="noopener"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15,3 21,3 21,9"/><line x1="10" y1="14" x2="21" y2="3"/></svg> Public post mentions</a></div>
+    </div>
+
+    <div class="card fade-up">
+      <div class="card-label" style="display:flex;align-items:center;gap:7px">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" style="flex-shrink:0"><path d="M12 0C8.717 0 8.333.015 7.053.072 5.775.132 4.905.333 4.14.63c-.789.306-1.459.717-2.126 1.384S.935 3.35.63 4.14C.333 4.905.131 5.775.072 7.053.012 8.333 0 8.717 0 12c0 3.283.015 3.667.072 4.947.06 1.277.261 2.148.558 2.913.306.788.717 1.459 1.384 2.126.667.666 1.336 1.079 2.126 1.384.766.296 1.636.499 2.913.558C8.333 23.988 8.717 24 12 24c3.283 0 3.667-.015 4.947-.072 1.277-.06 2.148-.262 2.913-.558.788-.306 1.459-.718 2.126-1.384.666-.667 1.079-1.335 1.384-2.126.296-.765.499-1.636.558-2.913.06-1.28.072-1.664.072-4.947 0-3.283-.015-3.667-.072-4.947-.06-1.277-.262-2.149-.558-2.913-.306-.789-.718-1.459-1.384-2.126C21.319 1.347 20.651.935 19.86.63c-.765-.297-1.636-.499-2.913-.558C15.667.012 15.283 0 12 0zm0 2.16c3.203 0 3.585.016 4.85.071 1.17.055 1.805.249 2.227.415.562.217.96.477 1.382.896.419.42.679.819.896 1.381.164.422.36 1.057.413 2.227.057 1.266.07 1.646.07 4.85s-.015 3.585-.074 4.85c-.061 1.17-.256 1.805-.421 2.227-.224.562-.479.96-.899 1.382-.419.419-.824.679-1.38.896-.42.164-1.065.36-2.235.413-1.274.057-1.649.07-4.859.07-3.211 0-3.586-.015-4.859-.074-1.171-.061-1.816-.256-2.236-.421-.569-.224-.96-.479-1.379-.899-.421-.419-.69-.824-.9-1.38-.165-.42-.359-1.065-.42-2.235-.045-1.26-.061-1.649-.061-4.844 0-3.196.016-3.586.061-4.861.061-1.17.255-1.814.42-2.234.21-.57.479-.96.9-1.381.419-.419.81-.689 1.379-.898.42-.166 1.051-.361 2.221-.421 1.275-.045 1.65-.06 4.859-.06zm0 3.678c-3.405 0-6.162 2.76-6.162 6.162 0 3.405 2.76 6.162 6.162 6.162 3.405 0 6.162-2.76 6.162-6.162 0-3.405-2.76-6.162-6.162-6.162zM12 16c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" fill="var(--ink-3)"/></svg>
+        Instagram — mention &amp; comment signals
+      </div>
+      <p style="font-size:12px;color:var(--ink-3);line-height:1.6;margin-bottom:4px">~180 brand mentions. Aesthetic and gifting content highly positive. Delivery complaint comments on 2 sponsored posts require CS response.</p>
+      <div class="tags">
+        <span class="tag tag-spike">ad comment — delivery</span>
+        <span class="tag">aesthetic</span>
+        <span class="tag">gifting</span>
+        <span class="tag">flatlay</span>
+        <span class="tag">fragrance shelf</span>
+        <span class="tag">unboxing</span>
+      </div>
+      <div class="alert-sources" style="margin-top:10px"><a class="source-link link-ig" href="https://www.instagram.com/memoparis/" target="_blank" rel="noopener"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15,3 21,3 21,9"/><line x1="10" y1="14" x2="21" y2="3"/></svg> Official profile</a><a class="source-link link-ig" href="https://www.instagram.com/explore/tags/memoparis/" target="_blank" rel="noopener"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15,3 21,3 21,9"/><line x1="10" y1="14" x2="21" y2="3"/></svg> #memoparis</a><a class="source-link link-ig" href="https://www.instagram.com/explore/tags/memoparisfragrance/" target="_blank" rel="noopener"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15,3 21,3 21,9"/><line x1="10" y1="14" x2="21" y2="3"/></svg> #memoparisfragrance</a></div>
+    </div>
+
+    <div class="card fade-up">
+      <div class="card-label" style="display:flex;align-items:center;gap:7px">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" style="flex-shrink:0"><path d="M12 0C5.373 0 0 5.372 0 12c0 5.084 3.163 9.426 7.627 11.174-.105-.949-.2-2.405.042-3.441.218-.937 1.407-5.965 1.407-5.965s-.359-.719-.359-1.782c0-1.668.967-2.914 2.171-2.914 1.023 0 1.518.769 1.518 1.69 0 1.029-.655 2.568-.994 3.995-.283 1.194.599 2.169 1.777 2.169 2.133 0 3.772-2.249 3.772-5.495 0-2.873-2.064-4.882-5.012-4.882-3.414 0-5.418 2.561-5.418 5.207 0 1.031.397 2.138.893 2.738.098.119.112.224.083.345l-.333 1.36c-.053.22-.174.267-.402.161-1.499-.698-2.436-2.889-2.436-4.649 0-3.785 2.75-7.262 7.929-7.262 4.163 0 7.398 2.967 7.398 6.931 0 4.136-2.607 7.464-6.227 7.464-1.216 0-2.359-.632-2.75-1.378l-.748 2.853c-.271 1.043-1.002 2.35-1.492 3.146C9.57 23.812 10.763 24 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0z" fill="var(--ink-3)"/></svg>
+        Pinterest — pin &amp; board signals
+      </div>
+      <p style="font-size:12px;color:var(--ink-3);line-height:1.6;margin-bottom:4px">310+ repins across luxury fragrance, gifting, and interior boards. Highly positive sentiment — aspirational save behaviour dominant. Strong brand discovery channel.</p>
+      <div class="tags">
+        <span class="tag">luxury fragrance</span>
+        <span class="tag">gift ideas</span>
+        <span class="tag">bottle aesthetic</span>
+        <span class="tag">scent wardrobe</span>
+        <span class="tag">travel size</span>
+        <span class="tag">wedding gifting</span>
+      </div>
+      <div class="alert-sources" style="margin-top:10px"><a class="source-link link-rd" href="https://www.pinterest.com/memoparis/" target="_blank" rel="noopener"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15,3 21,3 21,9"/><line x1="10" y1="14" x2="21" y2="3"/></svg> Official profile</a><a class="source-link link-rd" href="https://www.pinterest.com/search/pins/?q=memo+paris" target="_blank" rel="noopener"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15,3 21,3 21,9"/><line x1="10" y1="14" x2="21" y2="3"/></svg> Search pins</a><a class="source-link link-rd" href="https://www.pinterest.com/search/boards/?q=memo+paris" target="_blank" rel="noopener"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15,3 21,3 21,9"/><line x1="10" y1="14" x2="21" y2="3"/></svg> Search boards</a></div>
+    </div>
+
+    <div class="card fade-up col-span-2">
+      <div class="card-label">X — mention signals</div>
+      <p style="font-size:12px;color:var(--ink-3);line-height:1.6;margin-bottom:4px">~28 brand mentions. Primarily fragrance enthusiasts and collector accounts. Complaint volume low but amplification risk is higher due to influencer retweet potential.</p>
+      <div class="tags">
+        <span class="tag tag-spike">no customer service</span>
+        <span class="tag">niche gem</span>
+        <span class="tag">underrated</span>
+        <span class="tag">recommendation</span>
+        <span class="tag">independent perfumery</span>
+      </div>
+      <div class="alert-sources" style="margin-top:10px"><a class="source-link link-tt" href="https://x.com/search?q=memo+paris&f=live" target="_blank" rel="noopener"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15,3 21,3 21,9"/><line x1="10" y1="14" x2="21" y2="3"/></svg> Live mentions</a><a class="source-link link-tt" href="https://x.com/search?q=memo+paris&f=top" target="_blank" rel="noopener"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15,3 21,3 21,9"/><line x1="10" y1="14" x2="21" y2="3"/></svg> Top mentions</a><a class="source-link link-tt" href="https://x.com/MemoParisParfum" target="_blank" rel="noopener"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15,3 21,3 21,9"/><line x1="10" y1="14" x2="21" y2="3"/></svg> Official account</a><a class="source-link link-tt" href="https://x.com/search?q=%23memoparis" target="_blank" rel="noopener"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15,3 21,3 21,9"/><line x1="10" y1="14" x2="21" y2="3"/></svg> #memoparis</a><a class="source-link link-tt" href="https://x.com/search?q=memo+paris+complaint+OR+damaged+OR+refund&f=live" target="_blank" rel="noopener"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15,3 21,3 21,9"/><line x1="10" y1="14" x2="21" y2="3"/></svg> Complaints — live</a></div>
+    </div>
+
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     VIEW: ALERTS
+═══════════════════════════════════════════════════ -->
+<div class="view" id="view-alerts">
+<div class="shell">
+  <div class="section-header" style="margin-top:8px">
+    <span class="section-num">03</span>
+    <h2 class="section-title">Issue Detection &amp; Alerts</h2>
+  </div>
+  <div class="section-rule"></div>
+
+  <div class="alert-item alert-critical fade-up">
+    <div class="alert-header">
+      <span class="alert-badge badge-c">Critical</span>
+      <span class="alert-title">Rating drop — Trustpilot, −0.4 pts in 48 hours</span>
+      <span class="alert-time">2h ago · Real-time</span>
+    </div>
+    <div class="alert-meta">
+      <span>Trustpilot</span>
+      <span>Shipping · Packaging</span>
+      <span>14 reviews in 48h vs 3 baseline</span>
+    </div>
+    <div class="alert-body">14 reviews in 48h vs 3-per-day baseline (4.7× spike). 62% mention delivery delays or packaging damage linked to April 28 carrier transition. 9 reviews unanswered beyond SLA. CS team must action immediately.</div>
+    <div class="alert-sources">
+      <a class="source-link link-tp" href="https://www.trustpilot.com/review/memo-paris.com?sort=recency" target="_blank" rel="noopener"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15,3 21,3 21,9"/><line x1="10" y1="14" x2="21" y2="3"/></svg> Trustpilot — recent reviews</a>
+      <a class="source-link link-tp" href="https://www.trustpilot.com/review/memo-paris.com?stars=1" target="_blank" rel="noopener"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15,3 21,3 21,9"/><line x1="10" y1="14" x2="21" y2="3"/></svg> Trustpilot — 1-star only</a>
+    </div>
+  </div>
+
+  <div class="alert-item alert-critical fade-up">
+    <div class="alert-header">
+      <span class="alert-badge badge-c">Critical</span>
+      <span class="alert-title">Viral thread approaching threshold — r/fragrance</span>
+      <span class="alert-time">5h ago · Real-time</span>
+    </div>
+    <div class="alert-meta">
+      <span>Reddit r/fragrance</span>
+      <span>280 upvotes · 62 comments</span>
+      <span>Viral threshold: 300</span>
+    </div>
+    <div class="alert-body">Thread: "Ordered Memo Paris — arrived damaged, no response from brand." At 93% of viral threshold. If crossed, expect amplification to adjacent subs and social within 12–24h. Comms director briefing required now.</div>
+    <div class="alert-sources">
+      <a class="source-link link-rd" href="https://www.reddit.com/r/fragrance/search/?q=memo+paris&sort=new" target="_blank" rel="noopener"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15,3 21,3 21,9"/><line x1="10" y1="14" x2="21" y2="3"/></svg> r/fragrance — Memo Paris threads</a>
+      <a class="source-link link-rd" href="https://www.reddit.com/r/Perfumes/search/?q=memo+paris&sort=new" target="_blank" rel="noopener"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15,3 21,3 21,9"/><line x1="10" y1="14" x2="21" y2="3"/></svg> r/Perfumes — Memo Paris</a>
+      <a class="source-link link-rd" href="https://www.reddit.com/r/fragrance/search/?q=memo+paris+damaged&sort=top&t=month" target="_blank" rel="noopener"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15,3 21,3 21,9"/><line x1="10" y1="14" x2="21" y2="3"/></svg> r/fragrance — damaged · top month</a>
+    </div>
+  </div>
+
+  <div class="alert-item alert-medium fade-up">
+    <div class="alert-header">
+      <span class="alert-badge badge-m">Medium</span>
+      <span class="alert-title">Keyword spike — "leak" +340% vs 30-day baseline</span>
+      <span class="alert-time">18h ago · Daily</span>
+    </div>
+    <div class="alert-meta">
+      <span>Trustpilot + Google</span>
+      <span>11 mentions in 10 days</span>
+      <span>3σ deviation</span>
+    </div>
+    <div class="alert-body">Statistically significant spike. Possible logistics batch issue affecting a specific carrier or packaging SKU. Ops team to cross-reference fulfilment records for Apr 28 – May 10.</div>
+    <div class="alert-sources">
+      <a class="source-link link-tp" href="https://www.trustpilot.com/review/memo-paris.com?sort=recency" target="_blank" rel="noopener"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15,3 21,3 21,9"/><line x1="10" y1="14" x2="21" y2="3"/></svg> Trustpilot — recent reviews</a>
+      <a class="source-link link-gg" href="https://search.google.com/local/reviews?placeid=ChIJD7fiBh9u5kcRYJSMaMOCCwQ" target="_blank" rel="noopener"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15,3 21,3 21,9"/><line x1="10" y1="14" x2="21" y2="3"/></svg> Google — place reviews</a>
+    </div>
+  </div>
+
+  <div class="alert-item alert-medium fade-up">
+    <div class="alert-header">
+      <span class="alert-badge badge-m">Medium</span>
+      <span class="alert-title">"Reformulation" signal — Fragrantica community</span>
+      <span class="alert-time">Yesterday · Daily</span>
+    </div>
+    <div class="alert-meta">
+      <span>Fragrantica</span>
+      <span>4 independent mentions in 7 days</span>
+    </div>
+    <div class="alert-body">Four separate community members referenced potential reformulation or batch variation. Requires product team investigation. If unfounded, a brief factual statement may prevent narrative drift.</div>
+    <div class="alert-sources">
+      <a class="source-link link-fr" href="https://www.fragrantica.com/designers/Memo-Paris.html" target="_blank" rel="noopener"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15,3 21,3 21,9"/><line x1="10" y1="14" x2="21" y2="3"/></svg> Fragrantica — Memo Paris brand page</a>
+      <a class="source-link link-fr" href="https://www.fragrantica.com/search/?query=memo+paris" target="_blank" rel="noopener"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15,3 21,3 21,9"/><line x1="10" y1="14" x2="21" y2="3"/></svg> Fragrantica — search results</a>
+    </div>
+  </div>
+
+  <div class="alert-item alert-minor fade-up">
+    <div class="alert-header">
+      <span class="alert-badge badge-n">Minor</span>
+      <span class="alert-title">Response rate below SLA — Trustpilot</span>
+      <span class="alert-time">2d ago · Weekly</span>
+    </div>
+    <div class="alert-meta">
+      <span>Current: 71%</span>
+      <span>Target: 85%</span>
+      <span>9 unanswered reviews</span>
+    </div>
+    <div class="alert-body">9 negative reviews unanswered beyond 24h. CS capacity review recommended.</div>
+    <div class="alert-sources">
+      <a class="source-link link-tp" href="https://business.trustpilot.com/" target="_blank" rel="noopener"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15,3 21,3 21,9"/><line x1="10" y1="14" x2="21" y2="3"/></svg> Trustpilot Business — reply queue</a>
+      <a class="source-link link-tp" href="https://www.trustpilot.com/review/memo-paris.com?stars=1" target="_blank" rel="noopener"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15,3 21,3 21,9"/><line x1="10" y1="14" x2="21" y2="3"/></svg> Trustpilot — unanswered 1-star</a>
+    </div>
+  </div>
+
+  <div style="margin-top:24px">
+    <div class="card fade-up">
+      <div class="card-label">Alert cadence reference</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;border:1px solid var(--paper-3);border-radius:var(--radius);overflow:hidden;margin-top:8px">
+        <div class="cadence-col" style="border-right:1px solid var(--paper-3)">
+          <div class="cadence-head" style="color:var(--red)">Real-time · Critical</div>
+          <div class="cadence-item">Rating drop ≥ 0.3 pts / 48h</div>
+          <div class="cadence-item">Viral thread near threshold</div>
+          <div class="cadence-item">Keyword spike ≥ 3× baseline</div>
+          <div class="cadence-item">Unanswered critical review > 4h</div>
+        </div>
+        <div class="cadence-col" style="border-right:1px solid var(--paper-3)">
+          <div class="cadence-head" style="color:var(--amber)">Daily digest · Ops</div>
+          <div class="cadence-item">Keyword trend changes</div>
+          <div class="cadence-item">Platform score evolution</div>
+          <div class="cadence-item">Unanswered 1-star > 24h</div>
+          <div class="cadence-item">Community thread growth</div>
+        </div>
+        <div class="cadence-col">
+          <div class="cadence-head" style="color:var(--blue)">Weekly summary · Exec</div>
+          <div class="cadence-item">Trend vs 30d baseline</div>
+          <div class="cadence-item">Platform health scores</div>
+          <div class="cadence-item">Response rate compliance</div>
+          <div class="cadence-item">Executive KPI pack</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     VIEW: RESPONSE
+═══════════════════════════════════════════════════ -->
+<div class="view" id="view-response">
+<div class="shell">
+  <div class="section-header" style="margin-top:8px">
+    <span class="section-num">04</span>
+    <h2 class="section-title">Response Protocols</h2>
+  </div>
+  <div class="section-rule"></div>
+
+  <div class="ai-block fade-up" style="margin-bottom:20px">
+    <div class="ai-q">Governance principle</div>
+    <div class="ai-a">All public responses require Brand Director approval or a designated deputy. No automated public posting under any conditions. The system surfaces and queues — humans execute. Sensitive resolutions (replacements, refunds) are handled exclusively via private channel.</div>
+  </div>
+
+  <div class="response-card fade-up">
+    <div class="response-header">
+      <span class="response-type">Shipping / delivery complaint</span>
+      <span class="response-sla sla-medium">SLA: 12 hours</span>
+    </div>
+    <div class="response-body-wrap">
+      <div class="response-sub">Trustpilot · Google · Judge.me &nbsp;·&nbsp; Category: Logistics</div>
+      <div class="response-quote">"Thank you for sharing your experience, and we sincerely apologise that the arrival of your order did not meet the standard we hold ourselves to. A member of our client care team will reach out to you directly within the next few hours. We take every step of your journey with Memo Paris to heart."</div>
+      <div class="response-esc">
+        <span class="esc-tag">Logistics partner</span>
+        <span class="esc-tag">Owner: CS team</span>
+        <span class="esc-tag">Follow-up: private channel</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="response-card fade-up">
+    <div class="response-header">
+      <span class="response-type">Packaging damage / leak</span>
+      <span class="response-sla sla-urgent">SLA: 4 hours</span>
+    </div>
+    <div class="response-body-wrap">
+      <div class="response-sub">Trustpilot · Google &nbsp;·&nbsp; Category: Product integrity · Severity: High</div>
+      <div class="response-quote">"We are deeply sorry to learn of this — a damaged parcel is entirely unacceptable, and we understand how disappointing this must be. We will arrange for a replacement to be sent to you as a priority. Please allow us to contact you directly so we can resolve this without delay."</div>
+      <div class="response-esc">
+        <span class="esc-tag">QC + logistics</span>
+        <span class="esc-tag">Owner: Senior CS + ops</span>
+        <span class="esc-tag">Document batch reference</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="response-card fade-up">
+    <div class="response-header">
+      <span class="response-type">Reddit / community — public thread</span>
+      <span class="response-sla sla-urgent">SLA: 2h if viral</span>
+    </div>
+    <div class="response-body-wrap">
+      <div class="response-sub">Reddit · Fragrantica &nbsp;·&nbsp; Owner: Brand + Comms</div>
+      <div class="response-quote" style="font-style:normal;font-family:var(--sans);font-size:13px">Avoid brand account responses unless the thread reaches viral threshold or contains verifiable misinformation. For confirmed false claims (e.g. reformulation rumours): issue a factual, tonally neutral statement — no defensiveness. Escalate to Brand Director if upvotes exceed threshold.</div>
+      <div class="response-esc">
+        <span class="esc-tag">Brand Director + Legal if false claims</span>
+        <span class="esc-tag">Monitor: hourly</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="response-card fade-up">
+    <div class="response-header">
+      <span class="response-type">Positive review — luxury tone reinforcement</span>
+      <span class="response-sla sla-std">SLA: 48 hours</span>
+    </div>
+    <div class="response-body-wrap">
+      <div class="response-sub">All platforms &nbsp;·&nbsp; Category: Brand equity</div>
+      <div class="response-quote">"Your words are truly touching, and we are honoured that Memo Paris has found a place in your world. Our Maison was built on the belief that fragrance is memory — thank you for making it yours."</div>
+      <div class="response-esc">
+        <span class="esc-tag">No escalation required</span>
+        <span class="esc-tag">Owner: CS team</span>
+      </div>
+    </div>
+  </div>
+
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     VIEW: AI LAYER
+═══════════════════════════════════════════════════ -->
+<div class="view" id="view-ai">
+<div class="shell">
+  <div class="section-header" style="margin-top:8px">
+    <span class="section-num">05</span>
+    <h2 class="section-title">AI Situational Analysis</h2>
+  </div>
+  <div class="section-rule"></div>
+
+  <div class="ai-block fade-up">
+    <div class="ai-q">What happened?</div>
+    <div class="ai-a">A cluster of 14 shipping and packaging-related complaints appeared on Trustpilot and Google over the past 10 days, correlated with a logistics partner transition on April 28. Complaint volume is 4.7× the 30-day baseline. One Reddit thread on r/fragrance reached 280 upvotes as of this morning describing a damaged shipment. Separately, four Fragrantica community members raised batch variation concerns within the past week.</div>
+  </div>
+
+  <div class="ai-block fade-up">
+    <div class="ai-q">Why it matters?</div>
+    <div class="ai-a">Luxury brand equity is asymmetrically fragile. A sustained decline below 4.0 on Trustpilot shifts LLM-indexed reputation signals and begins surfacing negative reviews in generative search outputs — AI Overviews, Perplexity, Claude — when users query brand reputation. The Fragrantica reformulation signal, if unaddressed, risks permanent community-level narrative damage disproportionate to its current volume. This community carries outsized influence with the core luxury fragrance buyer.</div>
+  </div>
+
+  <div class="ai-block fade-up">
+    <div class="ai-q">What to do next?</div>
+    <div class="ai-a">
+      1 &nbsp;→&nbsp; Trigger logistics audit for April 28 – May 10 shipments, identify carrier or packaging failure point.<br>
+      2 &nbsp;→&nbsp; Action all unanswered Trustpilot 1-star reviews within 4 hours.<br>
+      3 &nbsp;→&nbsp; Brief brand director on Reddit thread immediately; prepare reactive statement if upvotes cross 300.<br>
+      4 &nbsp;→&nbsp; Task product team to investigate Fragrantica batch variation claims this week.<br>
+      5 &nbsp;→&nbsp; Review Google My Business for Paris flagship — currently unmonitored.<br>
+      6 &nbsp;→&nbsp; Initiate post-purchase review solicitation for Judge.me to reinforce positive signal density.
+    </div>
+  </div>
+
+  <div class="grid-2" style="margin-top:24px">
+    <div class="card fade-up">
+      <div class="card-label">Predictive risk scoring</div>
+      <div class="risk-grid" style="grid-template-columns:1fr 1fr;gap:10px;margin-top:0">
+        <div class="risk-item">
+          <div class="risk-label">Reddit escalation (72h)</div>
+          <div class="risk-value" style="color:var(--red)">76%</div>
+          <div class="risk-sub">Growth + comment velocity</div>
+        </div>
+        <div class="risk-item">
+          <div class="risk-label">Score recovery (if actioned)</div>
+          <div class="risk-value" style="color:var(--green)">+0.3</div>
+          <div class="risk-sub">85% response + logistics fix</div>
+        </div>
+        <div class="risk-item">
+          <div class="risk-label">GEO / LLM authority risk</div>
+          <div class="risk-value" style="color:var(--amber);font-size:20px;padding-top:4px">Medium</div>
+          <div class="risk-sub">Indexable if sustained 60d+</div>
+        </div>
+        <div class="risk-item">
+          <div class="risk-label">Reformulation narrative</div>
+          <div class="risk-value" style="color:var(--amber);font-size:20px;padding-top:4px">Early</div>
+          <div class="risk-sub">4 mentions — not yet critical</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card fade-up">
+      <div class="card-label">AI confidence indicators</div>
+      <p style="font-size:12px;color:var(--ink-3);line-height:1.6;margin-bottom:14px">Estimated by cross-referencing lexical signals with contextual patterns across all platforms.</p>
+      <div class="conf-row">
+        <span class="conf-label">Cross-platform signal consistency</span>
+        <div class="conf-bar-track"><div class="conf-bar-fill" id="conf-1" style="width:0%"></div></div>
+        <span class="conf-pct">84%</span>
+      </div>
+      <div class="conf-row">
+        <span class="conf-label">Anti-spam / authenticity confidence</span>
+        <div class="conf-bar-track"><div class="conf-bar-fill" id="conf-2" style="width:0%"></div></div>
+        <span class="conf-pct">91%</span>
+      </div>
+      <div class="conf-row">
+        <span class="conf-label">Luxury-domain contextual accuracy</span>
+        <div class="conf-bar-track"><div class="conf-bar-fill" id="conf-3" style="width:0%"></div></div>
+        <span class="conf-pct">78%</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card fade-up" style="margin-top:16px">
+    <div class="card-label">GEO / LLM brand authority note</div>
+    <p style="font-size:13.5px;color:var(--ink-2);line-height:1.8">
+      Large language models powering AI search — Google AI Overviews, Perplexity, Bing Copilot, Claude — index public review platforms and community discussions as brand reputation signals. A sustained cluster of negative reviews on high-authority domains like Trustpilot and Fragrantica will surface in LLM responses to queries such as <em>"Is Memo Paris worth buying?"</em><br><br>
+      Three protective levers: <strong>(1)</strong> Actively solicit post-purchase reviews to maintain positive signal density — with restraint and brand consistency. <strong>(2)</strong> Ensure official editorial channels carry rich, authoritative content on provenance, craft, and brand story. <strong>(3)</strong> Respond to all negative reviews promptly — a responded-to negative review carries materially less reputational weight in both human and model perception.
+    </p>
+  </div>
+
+</div>
+</div>
+
+<!-- FOOTER -->
+<footer class="footer-strip">
+  <span class="footer-note">Memo Paris — Brand Intelligence System · Confidential</span>
+  <span class="footer-note" id="footer-date"></span>
+</footer>
+
+<script>
+// ── Clock ──────────────────────────────────────────────────────
+function tick() {
+  const now = new Date();
+  document.getElementById('clock').textContent =
+    now.toLocaleTimeString('en-GB', {hour:'2-digit',minute:'2-digit'}) + ' · Live';
+  document.getElementById('footer-date').textContent =
+    now.toLocaleDateString('en-GB', {day:'numeric',month:'long',year:'numeric'});
+}
+tick();
+setInterval(tick, 30000);
+
+// ── Tab switching ──────────────────────────────────────────────
+function switchView(name, el) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('view-' + name).classList.add('active');
+  el.classList.add('active');
+  // re-trigger animations
+  setTimeout(() => {
+    document.querySelectorAll('#view-' + name + ' .fade-up').forEach((el, i) => {
+      el.classList.remove('visible');
+      setTimeout(() => el.classList.add('visible'), i * 60);
+    });
+  }, 10);
+  // animate bars on platforms view
+  if (name === 'platforms') animatePlatformBars();
+  if (name === 'ai') animateConfBars();
+}
+
+// ── Intersection observer for fade-ups ─────────────────────────
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) {
+      setTimeout(() => e.target.classList.add('visible'), i * 60);
+    }
+  });
+}, { threshold: 0.1 });
+
+function observeAll() {
+  document.querySelectorAll('.view.active .fade-up').forEach(el => observer.observe(el));
+}
+setTimeout(observeAll, 100);
+
+// ── Chart.js trend ─────────────────────────────────────────────
+const isDark = false;
+const data30 = [4.3,4.2,4.3,4.4,4.3,4.2,4.3,4.3,4.2,4.1,4.2,4.3,
+                4.2,4.1,4.0,4.1,4.2,4.1,4.0,3.9,4.0,4.1,4.0,4.1,
+                4.2,4.1,4.2,4.1,4.2,4.2];
+const labels = data30.map((_,i) => {
+  const d = new Date(2026,3,12); d.setDate(d.getDate()+i);
+  return i % 6 === 0 ? d.toLocaleDateString('en-GB',{day:'numeric',month:'short'}) : '';
+});
+
+new Chart(document.getElementById('trendChart'), {
+  type: 'line',
+  data: {
+    labels,
+    datasets: [{
+      data: data30,
+      borderColor: '#a08540',
+      borderWidth: 1.5,
+      pointRadius: 0,
+      pointHoverRadius: 4,
+      pointHoverBackgroundColor: '#a08540',
+      tension: 0.4,
+      fill: true,
+      backgroundColor: (ctx) => {
+        const g = ctx.chart.ctx.createLinearGradient(0,0,0,160);
+        g.addColorStop(0,'rgba(160,133,64,.18)');
+        g.addColorStop(1,'rgba(160,133,64,0)');
+        return g;
+      }
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    interaction: { mode: 'index', intersect: false },
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        backgroundColor: '#1a1814',
+        titleColor: '#b8b4ad',
+        bodyColor: '#f9f7f3',
+        titleFont: { family: "'DM Mono', monospace", size: 10 },
+        bodyFont: { family: "'Cormorant Garamond', serif", size: 14 },
+        callbacks: { label: ctx => ' ' + ctx.parsed.y.toFixed(1) + ' / 5' }
+      }
+    },
+    scales: {
+      x: {
+        grid: { color: 'rgba(0,0,0,.04)' },
+        ticks: { color: '#b8b4ad', font: { family:"'DM Mono',monospace", size: 9 } }
+      },
+      y: {
+        min: 3.5, max: 4.8,
+        grid: { color: 'rgba(0,0,0,.04)' },
+        ticks: { color: '#b8b4ad', font: { family:"'DM Mono',monospace", size: 9 }, stepSize: 0.3 }
+      }
+    }
+  }
+});
+
+// ── Animated bars ──────────────────────────────────────────────
+function animatePlatformBars() {
+  const bars = [
+    ['bar-tp', 82], ['bar-jm', 88], ['bar-gg', 84],
+    ['bar-ig', 80], ['bar-tt', 70], ['bar-fb', 76],
+    ['bar-pt', 86], ['bar-fr', 78], ['bar-rd', 72], ['bar-xi', 74]
+  ];
+  bars.forEach(([id, w], i) => {
+    setTimeout(() => {
+      const el = document.getElementById(id);
+      if (el) el.style.width = w + '%';
+    }, i * 80);
+  });
+}
+
+function animateConfBars() {
+  [['conf-1',84],['conf-2',91],['conf-3',78]].forEach(([id,w],i) => {
+    setTimeout(() => {
+      const el = document.getElementById(id);
+      if(el) el.style.width = w+'%';
+    }, i * 120 + 200);
+  });
+}
+
+// Initial fade-up trigger
+setTimeout(() => {
+  document.querySelectorAll('#view-overview .fade-up').forEach((el, i) => {
+    setTimeout(() => el.classList.add('visible'), i * 80);
+  });
+}, 150);
+</script>
+</body>
+</html>
