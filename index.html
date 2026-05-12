@@ -202,17 +202,20 @@
   }
   .kpi-value {
     font-family: var(--serif);
-    font-size: 36px;
+    font-size: 38px;
     font-weight: 300;
     color: var(--ink);
     line-height: 1;
     margin-bottom: 6px;
+    letter-spacing: -0.01em;
   }
   .kpi-value sup {
-    font-size: 15px;
+    font-size: 18px;
     vertical-align: super;
     font-family: var(--sans);
-    font-weight: 300;
+    font-weight: 400;
+    color: var(--ink-2);
+    margin-left: 1px;
   }
   .kpi-delta {
     font-family: var(--mono);
@@ -285,7 +288,7 @@
   /* ── PLATFORM ROWS ────────────────────────────────────────── */
   .platform-item {
     display: grid;
-    grid-template-columns: 120px 1fr 48px 70px 80px;
+    grid-template-columns: 28px 110px 1fr 48px 70px 80px;
     align-items: center;
     gap: 12px;
     padding: 12px 0;
@@ -293,6 +296,7 @@
     font-size: 13px;
   }
   .platform-item:last-child { border-bottom: none; }
+  .platform-logo { display:flex; align-items:center; justify-content:center; flex-shrink:0; }
   .platform-name {
     font-weight: 400;
     color: var(--ink);
@@ -386,6 +390,30 @@
     margin-bottom: 6px;
   }
   .alert-body { font-size: 12px; color: var(--ink-2); line-height: 1.6; }
+  .alert-sources { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+  .source-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.06em;
+    padding: 4px 10px;
+    border-radius: 99px;
+    border: 1px solid currentColor;
+    text-decoration: none;
+    transition: opacity .15s, transform .1s;
+    opacity: 0.75;
+  }
+  .source-link:hover { opacity: 1; transform: translateY(-1px); }
+  .source-link svg { flex-shrink: 0; }
+  .link-tp   { color: var(--green); }
+  .link-rd   { color: #ff4500; }
+  .link-fr   { color: var(--amber); }
+  .link-gg   { color: var(--blue); }
+  .link-ig   { color: #c13584; }
+  .link-tt   { color: var(--ink-2); }
+  .link-fb   { color: var(--blue); }
   .alert-time {
     font-family: var(--mono);
     font-size: 9.5px;
@@ -663,7 +691,7 @@
     .kpi-strip { grid-template-columns: repeat(3,1fr); }
     .grid-2, .grid-3 { grid-template-columns: 1fr; }
     .col-span-2 { grid-column: span 1; }
-    .platform-item { grid-template-columns: 100px 1fr 40px; }
+    .platform-item { grid-template-columns: 24px 90px 1fr 40px; }
     .plat-vol, .plat-delta { display: none; }
   }
   @media (max-width: 600px) {
@@ -714,13 +742,13 @@
   <div class="kpi-strip fade-up">
     <div class="kpi-cell">
       <div class="kpi-eyebrow">Weighted score</div>
-      <div class="kpi-value">4.2<sup>/5</sup></div>
+      <div class="kpi-value">4.2 <sup style="font-size:16px;font-weight:400;color:var(--ink-3)">/5</sup></div>
       <div class="kpi-delta delta-neg">▼ 0.1 vs prior 30d</div>
       <div class="kpi-accent accent-red"></div>
     </div>
     <div class="kpi-cell">
       <div class="kpi-eyebrow">Net sentiment</div>
-      <div class="kpi-value">+62<sup>%</sup></div>
+      <div class="kpi-value">+62<sup style="font-size:20px;font-weight:400;color:var(--ink-2)">%</sup></div>
       <div class="kpi-delta delta-neg">▼ 4 pts month-on-month</div>
       <div class="kpi-accent accent-amber"></div>
     </div>
@@ -732,13 +760,13 @@
     </div>
     <div class="kpi-cell">
       <div class="kpi-eyebrow">Response rate</div>
-      <div class="kpi-value">71<sup>%</sup></div>
+      <div class="kpi-value">71<sup style="font-size:20px;font-weight:400;color:var(--ink-2)">%</sup></div>
       <div class="kpi-delta delta-neg">▼ Below 85% SLA</div>
       <div class="kpi-accent accent-red"></div>
     </div>
     <div class="kpi-cell">
       <div class="kpi-eyebrow">AI confidence</div>
-      <div class="kpi-value">84<sup>%</sup></div>
+      <div class="kpi-value">84<sup style="font-size:20px;font-weight:400;color:var(--ink-2)">%</sup></div>
       <div class="kpi-delta delta-neu">Stable</div>
       <div class="kpi-accent accent-gold"></div>
     </div>
@@ -919,9 +947,10 @@
   <div class="card fade-up">
     <div class="card-label">Platform health — 30-day window</div>
     <div class="platform-item" style="font-family:var(--mono);font-size:9px;letter-spacing:.1em;color:var(--ink-4);text-transform:uppercase;padding-bottom:8px;">
-      <span>Platform</span><span></span><span style="text-align:right">Score</span><span style="text-align:right">Change</span><span style="text-align:right">Volume</span>
+      <span></span><span>Platform</span><span></span><span style="text-align:right">Score</span><span style="text-align:right">Change</span><span style="text-align:right">Volume</span>
     </div>
     <div class="platform-item">
+      <span class="platform-logo"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="24" height="24" rx="4" fill="#00B67A"/><path d="M12 2l2.6 8H22l-6.2 4.5 2.4 7.5L12 17.5l-6.2 4.5 2.4-7.5L2 10h7.4L12 2z" fill="white"/></svg></span>
       <span class="platform-name">Trustpilot</span>
       <div class="bar-track"><div class="bar-fill" id="bar-tp" style="width:0%;background:var(--green)"></div></div>
       <span class="plat-score">4.1</span>
@@ -929,6 +958,7 @@
       <span class="plat-vol">124 reviews</span>
     </div>
     <div class="platform-item">
+      <span class="platform-logo"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="24" height="24" rx="4" fill="#F5821F"/><path d="M12 4C7.6 4 4 7.6 4 12s3.6 8 8 8 8-3.6 8-8-3.6-8-8-8zm0 3l1.8 5.4H19l-4.3 3.1 1.6 5.1L12 17.4l-4.3 3.2 1.6-5.1L5 12.4h5.2L12 7z" fill="white"/></svg></span>
       <span class="platform-name">Judge.me</span>
       <div class="bar-track"><div class="bar-fill" id="bar-jm" style="width:0%;background:var(--green)"></div></div>
       <span class="plat-score">4.4</span>
@@ -936,6 +966,7 @@
       <span class="plat-vol">67 reviews</span>
     </div>
     <div class="platform-item">
+      <span class="platform-logo"><svg width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><rect width="24" height="24" rx="4" fill="#fff" stroke="#e0e0e0" stroke-width="1"/><path d="M21.8 12.2c0-.7-.1-1.3-.2-2H12v3.8h5.5c-.2 1.2-1 2.3-2.1 3v2.5h3.4c2-1.8 3-4.5 3-7.3z" fill="#4285F4"/><path d="M12 22c2.7 0 5-0.9 6.7-2.4l-3.4-2.5c-.9.6-2 1-3.3 1-2.5 0-4.7-1.7-5.4-4H3v2.6C4.8 19.9 8.2 22 12 22z" fill="#34A853"/><path d="M6.6 14.1c-.2-.6-.3-1.3-.3-2s.1-1.4.3-2V7.5H3C2.4 8.8 2 10.4 2 12s.4 3.2 1 4.5l3.6-2.4z" fill="#FBBC04"/><path d="M12 5.9c1.4 0 2.7.5 3.7 1.4l2.8-2.8C16.9 2.9 14.7 2 12 2 8.2 2 4.8 4.1 3 7.5l3.6 2.6C7.3 7.6 9.5 5.9 12 5.9z" fill="#EA4335"/></svg></span>
       <span class="platform-name">Google</span>
       <div class="bar-track"><div class="bar-fill" id="bar-gg" style="width:0%;background:var(--green)"></div></div>
       <span class="plat-score">4.2</span>
@@ -943,6 +974,7 @@
       <span class="plat-vol">51 reviews</span>
     </div>
     <div class="platform-item">
+      <span class="platform-logo"><svg width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="ig-g" x1="0%" y1="100%" x2="100%" y2="0%"><stop offset="0%" stop-color="#F58529"/><stop offset="50%" stop-color="#DD2A7B"/><stop offset="100%" stop-color="#515BD4"/></linearGradient></defs><rect width="24" height="24" rx="5" fill="url(#ig-g)"/><rect x="6" y="6" width="12" height="12" rx="3.5" fill="none" stroke="white" stroke-width="1.5"/><circle cx="12" cy="12" r="3" fill="none" stroke="white" stroke-width="1.5"/><circle cx="16.2" cy="7.8" r="0.9" fill="white"/></svg></span>
       <span class="platform-name">Instagram</span>
       <div class="bar-track"><div class="bar-fill" id="bar-ig" style="width:0%;background:var(--green)"></div></div>
       <span class="plat-score">4.0</span>
@@ -950,6 +982,7 @@
       <span class="plat-vol">~180 mentions</span>
     </div>
     <div class="platform-item">
+      <span class="platform-logo"><svg width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><rect width="24" height="24" rx="4" fill="#010101"/><path d="M19 8.3c-1.3 0-2.4-.8-2.8-2h-2.3v8.2c0 1-.8 1.8-1.8 1.8s-1.8-.8-1.8-1.8.8-1.8 1.8-1.8c.2 0 .4 0 .6.1V10.5c-.2 0-.4-.1-.6-.1-2.3 0-4.1 1.8-4.1 4.1s1.8 4.1 4.1 4.1 4.1-1.8 4.1-4.1V10c.8.5 1.8.8 2.8.8V8.3z" fill="white"/></svg></span>
       <span class="platform-name">TikTok</span>
       <div class="bar-track"><div class="bar-fill" id="bar-tt" style="width:0%;background:var(--amber)"></div></div>
       <span class="plat-score" style="color:var(--amber)">3.5</span>
@@ -957,6 +990,7 @@
       <span class="plat-vol">~94 videos</span>
     </div>
     <div class="platform-item">
+      <span class="platform-logo"><svg width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><rect width="24" height="24" rx="4" fill="#1877F2"/><path d="M16 8h-2c-.6 0-1 .4-1 1v2h3l-.4 3H13v7h-3v-7H8v-3h2V9c0-2.2 1.8-4 4-4h2v3z" fill="white"/></svg></span>
       <span class="platform-name">Facebook</span>
       <div class="bar-track"><div class="bar-fill" id="bar-fb" style="width:0%;background:var(--amber)"></div></div>
       <span class="plat-score">3.8</span>
@@ -964,6 +998,7 @@
       <span class="plat-vol">~42 comments</span>
     </div>
     <div class="platform-item">
+      <span class="platform-logo"><svg width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><rect width="24" height="24" rx="4" fill="#E60023"/><path d="M12 2C6.5 2 2 6.5 2 12c0 4.2 2.6 7.8 6.3 9.3-.1-.8-.1-2 .2-2.9l1.3-5.5s-.3-.7-.3-1.7c0-1.6.9-2.8 2.3-2.8 1.1 0 1.6.8 1.6 1.8 0 1.1-.7 2.7-1.1 4.2-.3 1.2.6 2.2 1.8 2.2 2.2 0 3.7-2.8 3.7-6.1 0-2.5-1.7-4.4-4.5-4.4-3.3 0-5.3 2.4-5.3 5.1 0 .9.3 1.6.7 2.1.2.2.2.3.1.6l-.3 1c-.1.3-.3.4-.6.3-1.7-.7-2.5-2.6-2.5-4.7 0-3.5 2.9-7.7 8.7-7.7 4.6 0 7.6 3.3 7.6 6.9 0 4.7-2.6 8.2-6.5 8.2-1.3 0-2.5-.7-2.9-1.5l-.8 3.1c-.3 1-.9 2-1.4 2.7.9.3 1.9.4 2.8.4 5.5 0 10-4.5 10-10S17.5 2 12 2z" fill="white"/></svg></span>
       <span class="platform-name">Pinterest</span>
       <div class="bar-track"><div class="bar-fill" id="bar-pt" style="width:0%;background:var(--green)"></div></div>
       <span class="plat-score delta-pos">4.3</span>
@@ -971,6 +1006,7 @@
       <span class="plat-vol">~310 pins</span>
     </div>
     <div class="platform-item">
+      <span class="platform-logo"><svg width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><rect width="24" height="24" rx="4" fill="#8B1A4A"/><path d="M12 3c-1.7 0-3 1.3-3 3 0 1 .5 1.9 1.3 2.4C8.5 9.1 7 10.9 7 13c0 2.8 2.2 5 5 5s5-2.2 5-5c0-2.1-1.5-3.9-3.3-4.6.8-.5 1.3-1.4 1.3-2.4 0-1.7-1.3-3-3-3zm0 2c.6 0 1 .4 1 1s-.4 1-1 1-1-.4-1-1 .4-1 1-1zm0 4c1.7 0 3 1.3 3 3s-1.3 3-3 3-3-1.3-3-3 1.3-3 3-3z" fill="white"/></svg></span>
       <span class="platform-name">Fragrantica</span>
       <div class="bar-track"><div class="bar-fill" id="bar-fr" style="width:0%;background:var(--amber)"></div></div>
       <span class="plat-score">3.9</span>
@@ -978,6 +1014,7 @@
       <span class="plat-vol">38 reviews</span>
     </div>
     <div class="platform-item">
+      <span class="platform-logo"><svg width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><rect width="24" height="24" rx="4" fill="#FF4500"/><path d="M22 12c0-1.1-.9-2-2-2-.5 0-1 .2-1.4.5C17.2 9.6 15.4 9 13.5 8.9l.9-4.2 2.9.6c0 .8.7 1.5 1.5 1.5s1.5-.7 1.5-1.5-.7-1.5-1.5-1.5c-.6 0-1.1.4-1.4.9l-3.3-.7c-.2 0-.3.1-.4.3l-1 4.7c-1.9.1-3.6.7-4.9 1.6C7 9.8 6.5 9.6 6 9.6c-1.1 0-2 .9-2 2 0 .7.4 1.4 1 1.7 0 .2-.1.5-.1.7 0 3.3 3.6 6 8 6s8-2.7 8-6c0-.2 0-.4-.1-.7.6-.3 1.2-1 1.2-1.7zm-13 1c0-.8.7-1.5 1.5-1.5s1.5.7 1.5 1.5-.7 1.5-1.5 1.5-1.5-.7-1.5-1.5zm8.5 3.5c-.9.9-2.4 1.4-4.5 1.4s-3.6-.5-4.5-1.4c-.2-.2-.2-.5 0-.7s.5-.2.7 0c.7.7 2 1.1 3.8 1.1s3.1-.4 3.8-1.1c.2-.2.5-.2.7 0s.2.5 0 .7zm-.5-2c-.8 0-1.5-.7-1.5-1.5s.7-1.5 1.5-1.5 1.5.7 1.5 1.5-.7 1.5-1.5 1.5z" fill="white"/></svg></span>
       <span class="platform-name">Reddit</span>
       <div class="bar-track"><div class="bar-fill" id="bar-rd" style="width:0%;background:var(--amber)"></div></div>
       <span class="plat-score" style="color:var(--amber)">3.6</span>
@@ -985,6 +1022,7 @@
       <span class="plat-vol">28 threads</span>
     </div>
     <div class="platform-item">
+      <span class="platform-logo"><svg width="20" height="20" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><rect width="24" height="24" rx="4" fill="#000"/><path d="M17.5 3h3l-6.5 7.4L21.5 21h-5.9l-4.2-5.5L6.3 21H3.2l6.9-7.9L3 3h6.1l3.8 5 4.6-5zM16.6 19.3h1.6L7.5 4.7H5.8l10.8 14.6z" fill="white"/></svg></span>
       <span class="platform-name">X</span>
       <div class="bar-track"><div class="bar-fill" id="bar-xi" style="width:0%;background:var(--amber)"></div></div>
       <span class="plat-score">3.7</span>
@@ -1006,6 +1044,7 @@
         <span class="tag">no response</span>
         <span class="tag">refund</span>
       </div>
+      <div class="alert-sources" style="margin-top:10px"><a class="source-link link-tp" href="https://www.trustpilot.com/review/memo-paris.com?sort=recency" target="_blank" rel="noopener"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15,3 21,3 21,9"/><line x1="10" y1="14" x2="21" y2="3"/></svg> All reviews — newest first</a><a class="source-link link-tp" href="https://www.trustpilot.com/review/memo-paris.com?stars=1" target="_blank" rel="noopener"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15,3 21,3 21,9"/><line x1="10" y1="14" x2="21" y2="3"/></svg> 1-star reviews</a><a class="source-link link-tp" href="https://www.trustpilot.com/review/memo-paris.com?stars=2" target="_blank" rel="noopener"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15,3 21,3 21,9"/><line x1="10" y1="14" x2="21" y2="3"/></svg> 2-star reviews</a><a class="source-link link-tp" href="https://business.trustpilot.com/" target="_blank" rel="noopener"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15,3 21,3 21,9"/><line x1="10" y1="14" x2="21" y2="3"/></svg> Business reply queue</a></div>
     </div>
 
     <div class="card fade-up">
@@ -1018,6 +1057,7 @@
         <span class="tag">overpriced</span>
         <span class="tag">gifting</span>
       </div>
+      <div class="alert-sources" style="margin-top:10px"><a class="source-link link-rd" href="https://www.reddit.com/r/fragrance/search/?q=memo+paris&sort=new" target="_blank" rel="noopener"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15,3 21,3 21,9"/><line x1="10" y1="14" x2="21" y2="3"/></svg> r/fragrance — new</a><a class="source-link link-rd" href="https://www.reddit.com/r/fragrance/search/?q=memo+paris&sort=top&t=month" target="_blank" rel="noopener"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15,3 21,3 21,9"/><line x1="10" y1="14" x2="21" y2="3"/></svg> r/fragrance — top month</a><a class="source-link link-rd" href="https://www.reddit.com/r/Perfumes/search/?q=memo+paris&sort=new" target="_blank" rel="noopener"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15,3 21,3 21,9"/><line x1="10" y1="14" x2="21" y2="3"/></svg> r/Perfumes — new</a><a class="source-link link-rd" href="https://www.reddit.com/r/fragrance/search/?q=memo+paris+damaged&sort=top" target="_blank" rel="noopener"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15,3 21,3 21,9"/><line x1="10" y1="14" x2="21" y2="3"/></svg> damaged threads</a></div>
     </div>
 
     <div class="card fade-up">
@@ -1029,6 +1069,7 @@
         <span class="tag">weak longevity</span>
         <span class="tag">sillage</span>
       </div>
+      <div class="alert-sources" style="margin-top:10px"><a class="source-link link-fr" href="https://www.fragrantica.com/designers/Memo-Paris.html" target="_blank" rel="noopener"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15,3 21,3 21,9"/><line x1="10" y1="14" x2="21" y2="3"/></svg> Brand page</a><a class="source-link link-fr" href="https://www.fragrantica.com/search/?query=memo+paris" target="_blank" rel="noopener"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15,3 21,3 21,9"/><line x1="10" y1="14" x2="21" y2="3"/></svg> All fragrance reviews</a><a class="source-link link-fr" href="https://www.fragrantica.com/board/viewforum.php?f=3" target="_blank" rel="noopener"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15,3 21,3 21,9"/><line x1="10" y1="14" x2="21" y2="3"/></svg> Community forum</a></div>
     </div>
 
     <div class="card fade-up">
@@ -1041,6 +1082,7 @@
         <span class="tag">unique</span>
         <span class="tag">reorder</span>
       </div>
+      <div class="alert-sources" style="margin-top:10px"><a class="source-link link-tp" href="https://judge.me/reviews/memo-paris" target="_blank" rel="noopener"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15,3 21,3 21,9"/><line x1="10" y1="14" x2="21" y2="3"/></svg> All product reviews</a><a class="source-link link-tp" href="https://judge.me/reviews/memo-paris?rating=1" target="_blank" rel="noopener"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15,3 21,3 21,9"/><line x1="10" y1="14" x2="21" y2="3"/></svg> 1-star reviews</a><a class="source-link link-tp" href="https://judge.me/reviews/memo-paris?rating=2" target="_blank" rel="noopener"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15,3 21,3 21,9"/><line x1="10" y1="14" x2="21" y2="3"/></svg> 2-star reviews</a></div>
     </div>
 
     <div class="card fade-up">
@@ -1057,6 +1099,7 @@
         <span class="tag">scent review</span>
         <span class="tag">gifting inspo</span>
       </div>
+      <div class="alert-sources" style="margin-top:10px"><a class="source-link link-tt" href="https://www.tiktok.com/search?q=memo+paris" target="_blank" rel="noopener"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15,3 21,3 21,9"/><line x1="10" y1="14" x2="21" y2="3"/></svg> Search — memo paris</a><a class="source-link link-tt" href="https://www.tiktok.com/search?q=memo+paris+delivery" target="_blank" rel="noopener"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15,3 21,3 21,9"/><line x1="10" y1="14" x2="21" y2="3"/></svg> Delivery complaint videos</a><a class="source-link link-tt" href="https://www.tiktok.com/@memoparis" target="_blank" rel="noopener"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15,3 21,3 21,9"/><line x1="10" y1="14" x2="21" y2="3"/></svg> Official account</a><a class="source-link link-tt" href="https://www.tiktok.com/search?q=%23memoparis" target="_blank" rel="noopener"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15,3 21,3 21,9"/><line x1="10" y1="14" x2="21" y2="3"/></svg> #memoparis hashtag</a></div>
     </div>
 
     <div class="card fade-up">
@@ -1072,6 +1115,7 @@
         <span class="tag">in-store</span>
         <span class="tag">price query</span>
       </div>
+      <div class="alert-sources" style="margin-top:10px"><a class="source-link link-fb" href="https://www.facebook.com/memoparis" target="_blank" rel="noopener"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15,3 21,3 21,9"/><line x1="10" y1="14" x2="21" y2="3"/></svg> Brand page</a><a class="source-link link-fb" href="https://www.facebook.com/memoparis/reviews" target="_blank" rel="noopener"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15,3 21,3 21,9"/><line x1="10" y1="14" x2="21" y2="3"/></svg> Page reviews</a><a class="source-link link-fb" href="https://www.facebook.com/search/posts?q=memo+paris" target="_blank" rel="noopener"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15,3 21,3 21,9"/><line x1="10" y1="14" x2="21" y2="3"/></svg> Public post mentions</a></div>
     </div>
 
     <div class="card fade-up">
@@ -1088,6 +1132,7 @@
         <span class="tag">fragrance shelf</span>
         <span class="tag">unboxing</span>
       </div>
+      <div class="alert-sources" style="margin-top:10px"><a class="source-link link-ig" href="https://www.instagram.com/memoparis/" target="_blank" rel="noopener"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15,3 21,3 21,9"/><line x1="10" y1="14" x2="21" y2="3"/></svg> Official profile</a><a class="source-link link-ig" href="https://www.instagram.com/explore/tags/memoparis/" target="_blank" rel="noopener"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15,3 21,3 21,9"/><line x1="10" y1="14" x2="21" y2="3"/></svg> #memoparis</a><a class="source-link link-ig" href="https://www.instagram.com/explore/tags/memoparisfragrance/" target="_blank" rel="noopener"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15,3 21,3 21,9"/><line x1="10" y1="14" x2="21" y2="3"/></svg> #memoparisfragrance</a></div>
     </div>
 
     <div class="card fade-up">
@@ -1104,6 +1149,7 @@
         <span class="tag">travel size</span>
         <span class="tag">wedding gifting</span>
       </div>
+      <div class="alert-sources" style="margin-top:10px"><a class="source-link link-rd" href="https://www.pinterest.com/memoparis/" target="_blank" rel="noopener"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15,3 21,3 21,9"/><line x1="10" y1="14" x2="21" y2="3"/></svg> Official profile</a><a class="source-link link-rd" href="https://www.pinterest.com/search/pins/?q=memo+paris" target="_blank" rel="noopener"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15,3 21,3 21,9"/><line x1="10" y1="14" x2="21" y2="3"/></svg> Search pins</a><a class="source-link link-rd" href="https://www.pinterest.com/search/boards/?q=memo+paris" target="_blank" rel="noopener"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15,3 21,3 21,9"/><line x1="10" y1="14" x2="21" y2="3"/></svg> Search boards</a></div>
     </div>
 
     <div class="card fade-up col-span-2">
@@ -1116,6 +1162,7 @@
         <span class="tag">recommendation</span>
         <span class="tag">independent perfumery</span>
       </div>
+      <div class="alert-sources" style="margin-top:10px"><a class="source-link link-tt" href="https://x.com/search?q=memo+paris&f=live" target="_blank" rel="noopener"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15,3 21,3 21,9"/><line x1="10" y1="14" x2="21" y2="3"/></svg> Live mentions</a><a class="source-link link-tt" href="https://x.com/search?q=memo+paris&f=top" target="_blank" rel="noopener"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15,3 21,3 21,9"/><line x1="10" y1="14" x2="21" y2="3"/></svg> Top mentions</a><a class="source-link link-tt" href="https://x.com/MemoParisParfum" target="_blank" rel="noopener"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15,3 21,3 21,9"/><line x1="10" y1="14" x2="21" y2="3"/></svg> Official account</a><a class="source-link link-tt" href="https://x.com/search?q=%23memoparis" target="_blank" rel="noopener"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15,3 21,3 21,9"/><line x1="10" y1="14" x2="21" y2="3"/></svg> #memoparis</a><a class="source-link link-tt" href="https://x.com/search?q=memo+paris+complaint+OR+damaged+OR+refund&f=live" target="_blank" rel="noopener"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15,3 21,3 21,9"/><line x1="10" y1="14" x2="21" y2="3"/></svg> Complaints — live</a></div>
     </div>
 
   </div>
@@ -1145,6 +1192,10 @@
       <span>14 reviews in 48h vs 3 baseline</span>
     </div>
     <div class="alert-body">14 reviews in 48h vs 3-per-day baseline (4.7× spike). 62% mention delivery delays or packaging damage linked to April 28 carrier transition. 9 reviews unanswered beyond SLA. CS team must action immediately.</div>
+    <div class="alert-sources">
+      <a class="source-link link-tp" href="https://www.trustpilot.com/review/memo-paris.com?sort=recency" target="_blank" rel="noopener"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15,3 21,3 21,9"/><line x1="10" y1="14" x2="21" y2="3"/></svg> Trustpilot — recent reviews</a>
+      <a class="source-link link-tp" href="https://www.trustpilot.com/review/memo-paris.com?stars=1" target="_blank" rel="noopener"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15,3 21,3 21,9"/><line x1="10" y1="14" x2="21" y2="3"/></svg> Trustpilot — 1-star only</a>
+    </div>
   </div>
 
   <div class="alert-item alert-critical fade-up">
@@ -1159,6 +1210,11 @@
       <span>Viral threshold: 300</span>
     </div>
     <div class="alert-body">Thread: "Ordered Memo Paris — arrived damaged, no response from brand." At 93% of viral threshold. If crossed, expect amplification to adjacent subs and social within 12–24h. Comms director briefing required now.</div>
+    <div class="alert-sources">
+      <a class="source-link link-rd" href="https://www.reddit.com/r/fragrance/search/?q=memo+paris&sort=new" target="_blank" rel="noopener"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15,3 21,3 21,9"/><line x1="10" y1="14" x2="21" y2="3"/></svg> r/fragrance — Memo Paris threads</a>
+      <a class="source-link link-rd" href="https://www.reddit.com/r/Perfumes/search/?q=memo+paris&sort=new" target="_blank" rel="noopener"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15,3 21,3 21,9"/><line x1="10" y1="14" x2="21" y2="3"/></svg> r/Perfumes — Memo Paris</a>
+      <a class="source-link link-rd" href="https://www.reddit.com/r/fragrance/search/?q=memo+paris+damaged&sort=top&t=month" target="_blank" rel="noopener"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15,3 21,3 21,9"/><line x1="10" y1="14" x2="21" y2="3"/></svg> r/fragrance — damaged · top month</a>
+    </div>
   </div>
 
   <div class="alert-item alert-medium fade-up">
@@ -1173,6 +1229,10 @@
       <span>3σ deviation</span>
     </div>
     <div class="alert-body">Statistically significant spike. Possible logistics batch issue affecting a specific carrier or packaging SKU. Ops team to cross-reference fulfilment records for Apr 28 – May 10.</div>
+    <div class="alert-sources">
+      <a class="source-link link-tp" href="https://www.trustpilot.com/review/memo-paris.com?sort=recency" target="_blank" rel="noopener"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15,3 21,3 21,9"/><line x1="10" y1="14" x2="21" y2="3"/></svg> Trustpilot — recent reviews</a>
+      <a class="source-link link-gg" href="https://search.google.com/local/reviews?placeid=ChIJD7fiBh9u5kcRYJSMaMOCCwQ" target="_blank" rel="noopener"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15,3 21,3 21,9"/><line x1="10" y1="14" x2="21" y2="3"/></svg> Google — place reviews</a>
+    </div>
   </div>
 
   <div class="alert-item alert-medium fade-up">
@@ -1186,6 +1246,10 @@
       <span>4 independent mentions in 7 days</span>
     </div>
     <div class="alert-body">Four separate community members referenced potential reformulation or batch variation. Requires product team investigation. If unfounded, a brief factual statement may prevent narrative drift.</div>
+    <div class="alert-sources">
+      <a class="source-link link-fr" href="https://www.fragrantica.com/designers/Memo-Paris.html" target="_blank" rel="noopener"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15,3 21,3 21,9"/><line x1="10" y1="14" x2="21" y2="3"/></svg> Fragrantica — Memo Paris brand page</a>
+      <a class="source-link link-fr" href="https://www.fragrantica.com/search/?query=memo+paris" target="_blank" rel="noopener"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15,3 21,3 21,9"/><line x1="10" y1="14" x2="21" y2="3"/></svg> Fragrantica — search results</a>
+    </div>
   </div>
 
   <div class="alert-item alert-minor fade-up">
@@ -1200,6 +1264,10 @@
       <span>9 unanswered reviews</span>
     </div>
     <div class="alert-body">9 negative reviews unanswered beyond 24h. CS capacity review recommended.</div>
+    <div class="alert-sources">
+      <a class="source-link link-tp" href="https://business.trustpilot.com/" target="_blank" rel="noopener"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15,3 21,3 21,9"/><line x1="10" y1="14" x2="21" y2="3"/></svg> Trustpilot Business — reply queue</a>
+      <a class="source-link link-tp" href="https://www.trustpilot.com/review/memo-paris.com?stars=1" target="_blank" rel="noopener"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/><polyline points="15,3 21,3 21,9"/><line x1="10" y1="14" x2="21" y2="3"/></svg> Trustpilot — unanswered 1-star</a>
+    </div>
   </div>
 
   <div style="margin-top:24px">
